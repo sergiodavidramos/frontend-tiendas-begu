@@ -1,84 +1,79 @@
-import Head from 'next/head'
-import TopNavbar from '../../components/Navbar'
-import SideNav from '../../components/Navbar/SideNav'
-import Footer from '../../components/Footer'
-import CardTable from '../../components/Productos/CardTable'
-import Link from 'next/link'
-import Notifications, { notify } from 'react-notify-toast'
-import { useState, useContext } from 'react'
-import UserContext from '../../components/UserContext'
-import { API_URL } from '../../components/Config'
+import Head from "next/head";
+import TopNavbar from "../../components/Navbar";
+import SideNav from "../../components/Navbar/SideNav";
+import Footer from "../../components/Footer";
+import CardTable from "../../components/Productos/CardTable";
+import Link from "next/link";
+import Notifications, { notify } from "react-notify-toast";
+import { useState, useContext } from "react";
+import UserContext from "../../components/UserContext";
+import { API_URL } from "../../components/Config";
 export default function Productos() {
-  const [proFiltrado, setProFiltrado] = useState(null)
-  const { categorias, token } = useContext(UserContext)
+  const [proFiltrado, setProFiltrado] = useState(null);
+  const { categorias, token } = useContext(UserContext);
   const handleChangeBuscarNombre = () => {
     if (event.target.value) {
       fetch(`${API_URL}/productos/buscar/${event.target.value}`, {
-        method: 'GET',
+        method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            notify.show('Error el en servidor', 'error')
+            notify.show("Error el en servidor", "error");
           } else {
-            setProFiltrado(data.body)
+            setProFiltrado(data.body);
           }
         })
-        .catch((error) => console.log('errorrr', error))
+        .catch((error) => console.log("errorrr", error));
     } else {
-      setProFiltrado(null)
+      setProFiltrado(null);
     }
-  }
+  };
   const handleChangeCategory = () => {
-    if (event.target.value !== '0') {
+    if (event.target.value !== "0") {
       fetch(`${API_URL}/productos/${event.target.value}`, {
-        method: 'GET',
+        method: "GET",
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            notify.show('Error el en servidor', 'error')
+            notify.show("Error el en servidor", "error");
           } else {
-            setProFiltrado(data.body)
+            setProFiltrado(data.body);
           }
         })
-        .catch((error) =>
-          notify.show('Error en el servidor', 'error', 2000)
-        )
+        .catch((error) => notify.show("Error en el servidor", "error", 2000));
     } else {
-      setProFiltrado(null)
+      setProFiltrado(null);
     }
-  }
+  };
   const handleChangeBuscarCodigo = () => {
     if (event.target.value) {
-      fetch(
-        `${API_URL}/productos/codigoproducto?code=${event.target.value}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      )
+      fetch(`${API_URL}/productos/codigoproducto?code=${event.target.value}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
             notify.show(
-              data.body || 'Error en el servidor buscar por codigo',
-              'error'
-            )
+              data.body || "Error en el servidor buscar por codigo",
+              "error"
+            );
           } else {
             data.body === null
               ? setProFiltrado([])
-              : setProFiltrado([data.body])
+              : setProFiltrado([data.body]);
           }
         })
-        .catch((error) => console.log('errorrr', error))
+        .catch((error) => console.log("errorrr", error));
     } else {
-      setProFiltrado(null)
+      setProFiltrado(null);
     }
-  }
+  };
   return (
     <>
       <Head></Head>
@@ -87,25 +82,21 @@ export default function Productos() {
         <SideNav />
         <div id="layoutSidenav_content">
           <main>
-            <Notifications options={{ zIndex: 9999, top: '56px' }} />
+            <Notifications options={{ zIndex: 9999, top: "56px" }} />
             <div className="container-fluid">
               <h2 className="mt-30 page-title">
                 Todos los productos en general
               </h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item active">Productos</li>
               </ol>
               <div className="row justify-content-between">
                 <div className="col-lg-12">
-                  <Link href="/productos/nuevo">
-                    <a className="add-btn hover-btn">
-                      Agregar Nuevo Producto
-                    </a>
+                  <Link legacyBehavior href="/productos/nuevo">
+                    <a className="add-btn hover-btn">Agregar Nuevo Producto</a>
                   </Link>
                 </div>
 
@@ -117,8 +108,7 @@ export default function Productos() {
                         name="categeory"
                         className="form-control"
                         defaultValue="0"
-                        onChange={handleChangeCategory}
-                      >
+                        onChange={handleChangeCategory}>
                         <option value="0">Todas las Categorias</option>
                         {categorias.map((cate) => (
                           <option value={cate._id} key={cate._id}>
@@ -164,5 +154,5 @@ export default function Productos() {
         </div>
       </div>
     </>
-  )
+  );
 }

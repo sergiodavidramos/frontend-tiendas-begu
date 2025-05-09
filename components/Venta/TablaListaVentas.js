@@ -27,6 +27,7 @@ const TablaListaPedidos = ({ ventas }) => {
                       return (
                         <div key={pro._id}>
                           <Link
+                            legacyBehavior
                             href="/productos/[id]/[title]"
                             as={`/productos/${
                               pro.producto._id
@@ -61,6 +62,7 @@ const TablaListaPedidos = ({ ventas }) => {
                   <td>{venta.total.toFixed(2)} Bs</td>
                   <td className="action-btns">
                     <Link
+                      legacyBehavior
                       href="/venta/editar/[id]"
                       as={`/venta/editar/${venta._id}`}>
                       <a className="views-btn">

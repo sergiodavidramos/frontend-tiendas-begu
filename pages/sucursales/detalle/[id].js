@@ -87,14 +87,10 @@ const viewSucursal = () => {
               <h2 className="mt-30 page-title">Sucursal</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/sucursales">
-                    <a>Sucursal</a>
-                  </Link>
+                  <Link href="/sucursales">Sucursal</Link>
                 </li>
                 <li className="breadcrumb-item active">Ver sucursal</li>
               </ol>

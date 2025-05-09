@@ -1,67 +1,61 @@
-import Footer from '../../components/Footer'
-import TopNavbar from '../../components/Navbar'
-import SideNav from '../../components/Navbar/SideNav'
-import Notifications, { notify } from 'react-notify-toast'
-import Link from 'next/link'
-import { useEffect, useContext, useState } from 'react'
-import UserContext from '../../components/UserContext'
-import { useRouter } from 'next/router'
-import axios from 'axios'
-import { API_URL } from '../../components/Config'
+import Footer from "../../components/Footer";
+import TopNavbar from "../../components/Navbar";
+import SideNav from "../../components/Navbar/SideNav";
+import Notifications, { notify } from "react-notify-toast";
+import Link from "next/link";
+import { useEffect, useContext, useState } from "react";
+import UserContext from "../../components/UserContext";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { API_URL } from "../../components/Config";
 
 const editarProveedor = () => {
-  const { token, signOut } = useContext(UserContext)
-  const router = useRouter()
-  const [proveedor, setProveedor] = useState(false)
+  const { token, signOut } = useContext(UserContext);
+  const router = useRouter();
+  const [proveedor, setProveedor] = useState(false);
 
   useEffect(() => {
-    const tokenLocal = localStorage.getItem('fribar-token')
-    const user = localStorage.getItem('fribar-user')
+    const tokenLocal = localStorage.getItem("fribar-token");
+    const user = localStorage.getItem("fribar-user");
     if (!tokenLocal && !user) {
-      signOut()
+      signOut();
     }
     if (
-      JSON.parse(user).role === 'GERENTE-ROLE' ||
-      JSON.parse(user).role === 'ADMIN-ROLE'
+      JSON.parse(user).role === "GERENTE-ROLE" ||
+      JSON.parse(user).role === "ADMIN-ROLE"
     ) {
-    } else signOut()
-    if (router && router.query.id) getProveedorByID(token, router.query.id)
-  }, [router])
+    } else signOut();
+    if (router && router.query.id) getProveedorByID(token, router.query.id);
+  }, [router]);
 
   function getProveedorByID(token, id) {
     axios
       .get(`${API_URL}/proveedor/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       })
       .then(({ data }) => {
         if (data.error)
-          notify.show(
-            `Error en el Servidor: ${data.error.status}`,
-            'error'
-          )
-        setProveedor(data.body)
-        console.log('ssss', data.body)
+          notify.show(`Error en el Servidor: ${data.error.status}`, "error");
+        setProveedor(data.body);
+        console.log("ssss", data.body);
       })
       .catch((error) =>
-        notify.show(
-          `Error en el Servidor: ${error.response.status}`,
-          'error'
-        )
-      )
+        notify.show(`Error en el Servidor: ${error.response.status}`, "error")
+      );
   }
 
   const handlerSubmitCiudad = () => {
-    let target = event.target
-    event.preventDefault()
+    let target = event.target;
+    event.preventDefault();
     if (!target[0].value || !target[1].value || !target[2].value)
       notify.show(
-        'Por favor todos los campos deben ser llenados',
-        'warning',
+        "Por favor todos los campos deben ser llenados",
+        "warning",
         2000
-      )
+      );
     else {
       axios
         .patch(
@@ -76,26 +70,26 @@ const editarProveedor = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'COntent-Type': 'application/json',
+              "COntent-Type": "application/json",
             },
           }
         )
         .then((res) => {
-          if (res.error) notify.show(res.body, 'error', 2000)
+          if (res.error) notify.show(res.body, "error", 2000);
           else {
-            notify.show('Marca agregado con Exito! ', 'success', 2000)
-            console.log(res)
+            notify.show("Marca agregado con Exito! ", "success", 2000);
+            console.log(res);
           }
         })
         .catch((error) => {
-          if (error.response.status === 401) signOut()
+          if (error.response.status === 401) signOut();
           notify.show(
             `Error en el Servidor: ${error.response.status}`,
-            'error'
-          )
-        })
+            "error"
+          );
+        });
     }
-  }
+  };
   return (
     <>
       <TopNavbar />
@@ -103,24 +97,18 @@ const editarProveedor = () => {
         <SideNav />
         <div id="layoutSidenav_content">
           <main>
-            <Notifications options={{ zIndex: 9999, top: '56px' }} />
+            <Notifications options={{ zIndex: 9999, top: "56px" }} />
 
             <div className="container-fluid">
               <h2 className="mt-30 page-title">Proveedores</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/ciudades">
-                    <a>Proveedor</a>
-                  </Link>
+                  <Link href="/ciudades">Proveedor</Link>
                 </li>
-                <li className="breadcrumb-item active">
-                  Agregar proveedor
-                </li>
+                <li className="breadcrumb-item active">Agregar proveedor</li>
               </ol>
               <div className="row">
                 <div className="col-lg-5 col-md-6">
@@ -156,9 +144,7 @@ const editarProveedor = () => {
                             />
                           </div>
                           <div className="form-group">
-                            <label className="form-label">
-                              Referencia*
-                            </label>
+                            <label className="form-label">Referencia*</label>
                             <input
                               type="text"
                               className="form-control"
@@ -168,9 +154,7 @@ const editarProveedor = () => {
                             />
                           </div>
                           <div className="form-group">
-                            <label className="form-label">
-                              Direccion*
-                            </label>
+                            <label className="form-label">Direccion*</label>
                             <input
                               type="text"
                               className="form-control"
@@ -186,13 +170,12 @@ const editarProveedor = () => {
                                 id="status"
                                 name="status"
                                 className="form-control"
-                                defaultValue={proveedor.status}
-                              >
+                                defaultValue={proveedor.status}>
                                 <option value={true}>Activo</option>
                                 <option value={false}>Inactivo</option>
                               </select>
                             ) : (
-                              ''
+                              ""
                             )}
                           </div>
 
@@ -211,7 +194,7 @@ const editarProveedor = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default editarProveedor
+export default editarProveedor;

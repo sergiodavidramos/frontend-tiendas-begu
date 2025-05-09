@@ -1,31 +1,31 @@
-import Head from 'next/head'
-import TopNavbar from '../../components/Navbar'
-import SideNav from '../../components/Navbar/SideNav'
-import Footer from '../../components/Footer'
-import Link from 'next/link'
-import { useState, useEffect, useContext } from 'react'
-import Notifications, { notify } from 'react-notify-toast'
-import UserContext from '../../components/UserContext'
-import { API_URL } from '../../components/Config'
+import Head from "next/head";
+import TopNavbar from "../../components/Navbar";
+import SideNav from "../../components/Navbar/SideNav";
+import Footer from "../../components/Footer";
+import Link from "next/link";
+import { useState, useEffect, useContext } from "react";
+import Notifications, { notify } from "react-notify-toast";
+import UserContext from "../../components/UserContext";
+import { API_URL } from "../../components/Config";
 const EgresoNuevo = () => {
-  const [token, setToken] = useState(false)
-  const { signOut, getAdmSucursal } = useContext(UserContext)
-  const [butt, setButt] = useState(false)
-  const [image, setImage] = useState(null)
-  const [imageUpload, setImageUpload] = useState(null)
+  const [token, setToken] = useState(false);
+  const { signOut, getAdmSucursal } = useContext(UserContext);
+  const [butt, setButt] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
   useEffect(() => {
-    const tokenLocal = localStorage.getItem('fribar-token')
+    const tokenLocal = localStorage.getItem("fribar-token");
     if (!tokenLocal) {
-      signOut()
+      signOut();
     }
-    setToken(tokenLocal)
-  }, [])
+    setToken(tokenLocal);
+  }, []);
   const handlerSubmit = () => {
-    event.preventDefault()
-    let target = event.target
-    setButt(true)
+    event.preventDefault();
+    let target = event.target;
+    setButt(true);
     fetch(`${API_URL}/compras/registrar-egreso`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
         idSucursal: getAdmSucursal,
         detalleTexto: target[0].value,
@@ -34,31 +34,31 @@ const EgresoNuevo = () => {
       }),
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
-        if (res.status === 401) signOut()
-        return res.json()
+        if (res.status === 401) signOut();
+        return res.json();
       })
       .then((response) => {
         if (response.error) {
-          console.log(response)
-          notify.show('Error al registrar el egreso', 'error', 1000)
-          setButt(false)
+          console.log(response);
+          notify.show("Error al registrar el egreso", "error", 1000);
+          setButt(false);
         } else {
-          notify.show('El egreso se registro con exito', 'success')
-          target[0].value = ''
-          target[1].value = ''
-          target[2].value = ''
-          setButt(false)
+          notify.show("El egreso se registro con exito", "success");
+          target[0].value = "";
+          target[1].value = "";
+          target[2].value = "";
+          setButt(false);
         }
       })
       .catch((error) => {
-        notify.show('Error en el Servidor (egreso)', 'error')
-        setButt(false)
-      })
-  }
+        notify.show("Error en el Servidor (egreso)", "error");
+        setButt(false);
+      });
+  };
   return (
     <>
       <Head></Head>
@@ -67,23 +67,21 @@ const EgresoNuevo = () => {
         <SideNav />
         <div id="layoutSidenav_content">
           <main>
-            <Notifications options={{ zIndex: 9999, top: '56px' }} />
+            <Notifications options={{ zIndex: 9999, top: "56px" }} />
             <div className="container-fluid">
               <h2 className="mt-30 page-title">Nueva Egreso</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/categorias">
+                  <Link legacyBehavior href="/categorias">
                     <a>Egresos</a>
                   </Link>
                 </li>
-                <li className="breadcrumb-item active">
-                  Registrar un egreso
-                </li>
+                <li className="breadcrumb-item active">Registrar un egreso</li>
               </ol>
 
               <div className="row">
@@ -112,9 +110,7 @@ const EgresoNuevo = () => {
                             </div>
                           </div>
                           <div className="form-group">
-                            <label className="form-label">
-                              Total Bs.*
-                            </label>
+                            <label className="form-label">Total Bs.*</label>
                             <input
                               type="number"
                               className="form-control"
@@ -133,8 +129,7 @@ const EgresoNuevo = () => {
                           <button
                             disabled={butt}
                             className="save-btn hover-btn"
-                            type="submit"
-                          >
+                            type="submit">
                             Registrar Egreso
                           </button>
                         </div>
@@ -149,7 +144,7 @@ const EgresoNuevo = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default EgresoNuevo
+export default EgresoNuevo;

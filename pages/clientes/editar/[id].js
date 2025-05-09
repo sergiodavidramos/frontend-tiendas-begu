@@ -172,12 +172,12 @@ const editClient = () => {
               <h2 className="mt-30 page-title">Clientes</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
                 <li className="breadcrumb-item active">
-                  <Link href="/clientes">
+                  <Link legacyBehavior href="/clientes">
                     <a>Clientes</a>
                   </Link>
                 </li>

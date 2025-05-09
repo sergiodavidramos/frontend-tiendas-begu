@@ -149,7 +149,7 @@ const TopNavbar = () => {
             )}
           </div>
         ) : (
-          <Link href={"/"}>
+          <Link legacyBehavior href={"/"}>
             <a className="navbar-brand logo-brand">Begú Minimarket</a>
           </Link>
         )
@@ -163,7 +163,7 @@ const TopNavbar = () => {
         onClick={handlerSid}>
         <i className="fas fa-bars"></i>
       </button>
-      <Link href="/">
+      <Link legacyBehavior href="/">
         <a className="frnt-link">
           <i className="fas fa-external-link-alt"></i>Inicio
         </a>
@@ -183,7 +183,7 @@ const TopNavbar = () => {
           <div
             className="dropdown-menu dropdown-menu-right"
             aria-labelledby="userDropdown">
-            <Link href="/perfil">
+            <Link legacyBehavior href="/perfil">
               <a className="dropdown-item admin-dropdown-item">Editar Perfil</a>
             </Link>
             <a

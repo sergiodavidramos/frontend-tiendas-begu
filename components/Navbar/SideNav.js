@@ -15,7 +15,7 @@ const SideNav = (props) => {
               <div className="nav">
                 {(user.role === "GERENTE-ROLE" ||
                   user.role === "ADMIN-ROLE") && (
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a
                       className={`nav-link ${
                         props.router.pathname === "/" ? "active" : ""
@@ -57,7 +57,7 @@ const SideNav = (props) => {
                   aria-labelledby="headingTwo"
                   data-parent="#sidenavAccordion">
                   <nav className="sb-sidenav-menu-nested nav">
-                    <Link href="/sucursales">
+                    <Link legacyBehavior href="/sucursales">
                       <a
                         className={`nav-link sub_nav_link ${
                           props.router.pathname === "/sucursales"
@@ -68,7 +68,7 @@ const SideNav = (props) => {
                       </a>
                     </Link>
                     {user.role === "GERENTE-ROLE" && (
-                      <Link href="/sucursales/nuevo">
+                      <Link legacyBehavior href="/sucursales/nuevo">
                         <a
                           className={`nav-link sub_nav_link ${
                             props.router.pathname === "/sucursales/nuevo"
@@ -83,7 +83,9 @@ const SideNav = (props) => {
                       user.role === "ADMIN-ROLE" ||
                       user.role === "ALMACEN-ROLE" ||
                       user.role === "USER-ROLE") && (
-                      <Link href="/sucursales/confirmar-traslado">
+                      <Link
+                        legacyBehavior
+                        href="/sucursales/confirmar-traslado">
                         <a
                           className={`nav-link sub_nav_link ${
                             props.router.pathname ===
@@ -130,7 +132,7 @@ const SideNav = (props) => {
                       aria-labelledby="headingTwo"
                       data-parent="#sidenavAccordion">
                       <nav className="sb-sidenav-menu-nested nav">
-                        <Link href="/proveedor">
+                        <Link legacyBehavior href="/proveedor">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/proveedor"
@@ -140,7 +142,7 @@ const SideNav = (props) => {
                             Todos los proveedores
                           </a>
                         </Link>
-                        <Link href="/proveedor/nuevo">
+                        <Link legacyBehavior href="/proveedor/nuevo">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/proveedor/nuevo"
@@ -187,7 +189,7 @@ const SideNav = (props) => {
                       aria-labelledby="headingTwo"
                       data-parent="#sidenavAccordion">
                       <nav className="sb-sidenav-menu-nested nav">
-                        <Link href="/categorias">
+                        <Link legacyBehavior href="/categorias">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/categorias"
@@ -197,7 +199,7 @@ const SideNav = (props) => {
                             Todas las Categorias
                           </a>
                         </Link>
-                        <Link href="/categorias/nuevo">
+                        <Link legacyBehavior href="/categorias/nuevo">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/categorias/nuevo"
@@ -240,7 +242,7 @@ const SideNav = (props) => {
                   aria-labelledby="headingTwo"
                   data-parent="#sidenavAccordion">
                   <nav className="sb-sidenav-menu-nested nav">
-                    <Link href="/productos">
+                    <Link legacyBehavior href="/productos">
                       <a
                         className={`nav-link sub_nav_link ${
                           props.router.pathname === "/productos" ? "active" : ""
@@ -251,7 +253,7 @@ const SideNav = (props) => {
                     {(user.role === "GERENTE-ROLE" ||
                       user.role === "ADMIN-ROLE" ||
                       user.role === "ALMACEN-ROLE") && (
-                      <Link href="/productos/nuevo">
+                      <Link legacyBehavior href="/productos/nuevo">
                         <a
                           className={`nav-link sub_nav_link ${
                             props.router.pathname === "/productos/nuevo"
@@ -294,7 +296,7 @@ const SideNav = (props) => {
                   aria-labelledby="headingTwo"
                   data-parent="#sidenavAccordion">
                   <nav className="sb-sidenav-menu-nested nav">
-                    <Link href="/venta">
+                    <Link legacyBehavior href="/venta">
                       <a
                         className={`nav-link sub_nav_link ${
                           props.router.pathname === "/venta" ? "active" : ""
@@ -304,7 +306,7 @@ const SideNav = (props) => {
                     </Link>
                     {(user.role === "GERENTE-ROLE" ||
                       user.role === "ADMIN-ROLE") && (
-                      <Link href="/venta/lista">
+                      <Link legacyBehavior href="/venta/lista">
                         <a
                           className={`nav-link sub_nav_link ${
                             props.router.pathname === "/venta/lista"
@@ -351,7 +353,7 @@ const SideNav = (props) => {
                       aria-labelledby="headingTwo"
                       data-parent="#sidenavAccordion">
                       <nav className="sb-sidenav-menu-nested nav">
-                        <Link href="/compras">
+                        <Link legacyBehavior href="/compras">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/compras"
@@ -361,7 +363,7 @@ const SideNav = (props) => {
                             Realizar Compra
                           </a>
                         </Link>
-                        <Link href="/compras/lista">
+                        <Link legacyBehavior href="/compras/lista">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/compras/lista"
@@ -371,7 +373,7 @@ const SideNav = (props) => {
                             Compras anteriores
                           </a>
                         </Link>
-                        <Link href="/compras/egreso">
+                        <Link legacyBehavior href="/compras/egreso">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/compras/egreso"
@@ -387,7 +389,7 @@ const SideNav = (props) => {
                 )}
                 {(user.role === "GERENTE-ROLE" ||
                   user.role === "ADMIN-ROLE") && (
-                  <Link href="/clientes">
+                  <Link legacyBehavior href="/clientes">
                     <a
                       className={`nav-link ${
                         props.router.pathname === "/clientes" ? "active" : ""
@@ -432,7 +434,7 @@ const SideNav = (props) => {
                       aria-labelledby="headingTwo"
                       data-parent="#sidenavAccordion">
                       <nav className="sb-sidenav-menu-nested nav">
-                        <Link href="/usuarios">
+                        <Link legacyBehavior href="/usuarios">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/usuarios"
@@ -442,7 +444,7 @@ const SideNav = (props) => {
                             Todos los usuarios
                           </a>
                         </Link>
-                        <Link href="/usuarios/nuevo">
+                        <Link legacyBehavior href="/usuarios/nuevo">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/usuarios/nuevo"
@@ -490,7 +492,7 @@ const SideNav = (props) => {
                       aria-labelledby="headingTwo"
                       data-parent="#sidenavAccordion">
                       <nav className="sb-sidenav-menu-nested nav">
-                        <Link href="/ofertas">
+                        <Link legacyBehavior href="/ofertas">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/ofertas"
@@ -500,7 +502,7 @@ const SideNav = (props) => {
                             Todas las ofertas
                           </a>
                         </Link>
-                        <Link href="/ofertas/nuevo">
+                        <Link legacyBehavior href="/ofertas/nuevo">
                           <a
                             className={`nav-link sub_nav_link ${
                               props.router.pathname === "/ofertas/nuevo"
@@ -516,7 +518,7 @@ const SideNav = (props) => {
                 )}
                 {(user.role === "GERENTE-ROLE" ||
                   user.role === "ADMIN-ROLE") && (
-                  <Link href={"/reportes"}>
+                  <Link legacyBehavior href={"/reportes"}>
                     <a
                       className={`nav-link ${
                         props.router.pathname === "/reportes" ? "active" : ""

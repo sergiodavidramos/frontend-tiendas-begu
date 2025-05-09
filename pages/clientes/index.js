@@ -142,7 +142,7 @@ const Clientes = () => {
               <h2 className="mt-30 page-title">Clientes</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
@@ -240,6 +240,7 @@ const Clientes = () => {
                                   </td>
                                   <td className="action-btns">
                                     <Link
+                                      legacyBehavior
                                       href="/clientes/[id]"
                                       as={`/clientes/${cli._id}`}>
                                       <a className="view-shop-btn" title="View">
@@ -247,6 +248,7 @@ const Clientes = () => {
                                       </a>
                                     </Link>
                                     <Link
+                                      legacyBehavior
                                       href="/clientes/editar/[id]"
                                       as={`/clientes/editar/${cli._id}`}>
                                       <a className="edit-btn" title="Edit">

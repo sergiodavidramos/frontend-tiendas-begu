@@ -1,16 +1,16 @@
-import Link from 'next/link'
-import moment from 'moment'
-import { API_URL } from '../Config'
+import Link from "next/link";
+import moment from "moment";
+import { API_URL } from "../Config";
 const filaProductos = ({
   pro,
   setLotesProducto,
   setAgregarProducto,
   agregarProducto,
 }) => {
-  moment.locale('es')
+  moment.locale("es");
   function agregar(pro) {
-    setLotesProducto(pro)
-    setAgregarProducto(!agregarProducto)
+    setLotesProducto(pro);
+    setAgregarProducto(!agregarProducto);
   }
   return (
     <tr>
@@ -30,7 +30,7 @@ const filaProductos = ({
             pro.stockLotes[0].lote
               ? pro.stockLotes[0].lote.fechaVencimiento
               : pro.stockLotes[0].fechaVencimiento
-          ).format('LL')}
+          ).format("LL")}
         </td>
       ) : (
         <td>Sin vencimiento</td>
@@ -44,21 +44,23 @@ const filaProductos = ({
       </td>
       <td>{pro.stockTotal}</td>
       <td className="action-btns">
-        <Link href="/productos/[id]" as={`/productos/${pro.producto._id}`}>
+        <Link
+          legacyBehavior
+          href="/productos/[id]"
+          as={`/productos/${pro.producto._id}`}>
           <a className="edit-btn" title="Editar">
             <i className="fas fa-edit"></i>
           </a>
         </Link>
         <a
           className="edit-btn"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: "pointer" }}
           title="Mover Producto"
-          onClick={() => agregar(pro)}
-        >
+          onClick={() => agregar(pro)}>
           <i className="fas fa-truck-loading"></i>
         </a>
       </td>
     </tr>
-  )
-}
-export default filaProductos
+  );
+};
+export default filaProductos;

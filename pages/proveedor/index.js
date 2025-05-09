@@ -1,57 +1,54 @@
-import TopNavbar from '../../components/Navbar'
-import SideNav from '../../components/Navbar/SideNav'
-import Link from 'next/link'
-import { useEffect, useContext, useState, useRef } from 'react'
-import UserContext from '../../components/UserContext'
-import Notifications, { notify } from 'react-notify-toast'
-import Footer from '../../components/Footer'
-import { API_URL } from '../../components/Config'
-import axios from 'axios'
+import TopNavbar from "../../components/Navbar";
+import SideNav from "../../components/Navbar/SideNav";
+import Link from "next/link";
+import { useEffect, useContext, useState, useRef } from "react";
+import UserContext from "../../components/UserContext";
+import Notifications, { notify } from "react-notify-toast";
+import Footer from "../../components/Footer";
+import { API_URL } from "../../components/Config";
+import axios from "axios";
 
 const Proveedor = () => {
-  const { token, signOut } = useContext(UserContext)
-  const [marcas, setMarcas] = useState(false)
+  const { token, signOut } = useContext(UserContext);
+  const [marcas, setMarcas] = useState(false);
 
-  const selectStatus = useRef(null)
+  const selectStatus = useRef(null);
 
   useEffect(() => {
-    const tokenLocal = localStorage.getItem('fribar-token')
-    const user = localStorage.getItem('fribar-user')
+    const tokenLocal = localStorage.getItem("fribar-token");
+    const user = localStorage.getItem("fribar-user");
     if (!tokenLocal && !user) {
-      signOut()
+      signOut();
     }
     if (
-      JSON.parse(user).role === 'GERENTE-ROLE' ||
-      JSON.parse(user).role === 'ADMIN-ROLE'
+      JSON.parse(user).role === "GERENTE-ROLE" ||
+      JSON.parse(user).role === "ADMIN-ROLE"
     )
-      getProveedorWithStatus(tokenLocal)
-    else signOut()
-  }, [])
+      getProveedorWithStatus(tokenLocal);
+    else signOut();
+  }, []);
 
   function getProveedorWithStatus(token) {
     axios
-      .get(
-        `${API_URL}/proveedor/all?status=${selectStatus.current.value}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'content-type': 'application/json',
-          },
-        }
-      )
+      .get(`${API_URL}/proveedor/all?status=${selectStatus.current.value}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      })
       .then(({ data }) => {
         if (data.error) {
-          notify.show('Error en el servidor (marca)', 'error', 2000)
+          notify.show("Error en el servidor (marca)", "error", 2000);
         } else {
-          setMarcas(data.body)
+          setMarcas(data.body);
         }
       })
       .catch((error) => {
-        notify.show(error.message, 'error', 2000)
-      })
+        notify.show(error.message, "error", 2000);
+      });
   }
   function handlerSubmitStatus() {
-    getProveedorWithStatus(token)
+    getProveedorWithStatus(token);
   }
   return (
     <>
@@ -60,12 +57,12 @@ const Proveedor = () => {
         <SideNav />
         <div id="layoutSidenav_content">
           <main>
-            <Notifications options={{ zIndex: 9999, top: '56px' }} />
+            <Notifications options={{ zIndex: 9999, top: "56px" }} />
             <div className="container-fluid">
               <h2 className="mt-30 page-title">Proveedores</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
@@ -73,7 +70,7 @@ const Proveedor = () => {
               </ol>
               <div className="row justify-content-between">
                 <div className="col-lg-12">
-                  <Link href="/proveedor/nuevo">
+                  <Link legacyBehavior href="/proveedor/nuevo">
                     <a className="add-btn hover-btn">Agregar proveedor</a>
                   </Link>
                 </div>
@@ -85,8 +82,7 @@ const Proveedor = () => {
                         name="action"
                         defaultValue="0"
                         className="form-control"
-                        ref={selectStatus}
-                      >
+                        ref={selectStatus}>
                         <option value={0}>Seleccione acción</option>
                         <option value={true}>Activos</option>
                         <option value={false}>Inactivos</option>
@@ -95,8 +91,7 @@ const Proveedor = () => {
                         <button
                           className="status-btn hover-btn"
                           type="submit"
-                          onClick={handlerSubmitStatus}
-                        >
+                          onClick={handlerSubmitStatus}>
                           Aplicar
                         </button>
                       </div>
@@ -114,7 +109,7 @@ const Proveedor = () => {
                         <table className="table ucp-table table-hover">
                           <thead>
                             <tr>
-                              <th style={{ width: '60px' }}>ID</th>
+                              <th style={{ width: "60px" }}>ID</th>
                               <th>Nombre</th>
                               <th>Celular</th>
                               <th>Referencia</th>
@@ -138,18 +133,17 @@ const Proveedor = () => {
                                     <span
                                       className={`badge-item ${
                                         ciu.status
-                                          ? 'badge-status'
-                                          : 'badge-status-false'
-                                      }`}
-                                    >
-                                      {ciu.status ? 'Activo' : 'Inactivo'}
+                                          ? "badge-status"
+                                          : "badge-status-false"
+                                      }`}>
+                                      {ciu.status ? "Activo" : "Inactivo"}
                                     </span>
                                   </td>
                                   <td className="action-btns">
                                     <Link
+                                      legacyBehavior
                                       href="/proveedor/[id]"
-                                      as={`/proveedor/${ciu._id}`}
-                                    >
+                                      as={`/proveedor/${ciu._id}`}>
                                       <a className="edit-btn">
                                         <i className="fas fa-edit"></i>
                                         Editar
@@ -172,6 +166,6 @@ const Proveedor = () => {
         </div>
       </div>
     </>
-  )
-}
-export default Proveedor
+  );
+};
+export default Proveedor;

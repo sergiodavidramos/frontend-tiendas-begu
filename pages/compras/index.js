@@ -288,7 +288,7 @@ const Compras = ({ categorias, marcas }) => {
               <h2 className="mt-30 page-title">Compras</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>

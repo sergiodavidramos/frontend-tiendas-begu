@@ -64,7 +64,7 @@ const Sucursal = () => {
                 <div className="col-lg-12">
                   {(user.role === "GERENTE-ROLE" ||
                     user.role === "ADMIN-ROLE") && (
-                    <Link href="/sucursales/nuevo">
+                    <Link legacyBehavior href="/sucursales/nuevo">
                       <a className="add-btn hover-btn">Agregar sucursal</a>
                     </Link>
                   )}
@@ -114,6 +114,7 @@ const Sucursal = () => {
                                   </td>
                                   <td className="action-btns">
                                     <Link
+                                      legacyBehavior
                                       href="/sucursales/detalle/[id]"
                                       as={`/sucursales/detalle/${sucursal._id}`}>
                                       <a
@@ -127,6 +128,7 @@ const Sucursal = () => {
                                       user.role === "ALMACEN-ROLE" ||
                                       user.role === "USER-ROLE") && (
                                       <Link
+                                        legacyBehavior
                                         href="/sucursales/tienda-productos/[id]"
                                         as={`/sucursales/tienda-productos/${sucursal._id}`}>
                                         <a
@@ -139,6 +141,7 @@ const Sucursal = () => {
                                     {(user.role === "GERENTE-ROLE" ||
                                       user.role === "ADMIN-ROLE") && (
                                       <Link
+                                        legacyBehavior
                                         href="/sucursales/editar/[id]"
                                         as={`/sucursales/editar/${sucursal._id}`}>
                                         <a

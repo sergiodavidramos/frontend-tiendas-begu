@@ -70,12 +70,12 @@ const CategoriaNuevo = () => {
               <h2 className="mt-30 page-title">Editar Categoria</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/categorias">
+                  <Link legacyBehavior href="/categorias">
                     <a>Categorias</a>
                   </Link>
                 </li>

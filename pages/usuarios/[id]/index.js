@@ -96,14 +96,10 @@ const viewClient = () => {
               <h2 className="mt-30 page-title">Informacion del usuarios</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item active">
-                  <Link href="/usuarios">
-                    <a>Usuarios</a>
-                  </Link>
+                  <Link href="/usuarios">Usuarios</Link>
                 </li>
                 <li className="breadcrumb-item active">Ver Usuario</li>
               </ol>

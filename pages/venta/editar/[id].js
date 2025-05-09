@@ -87,14 +87,10 @@ const ViewPedidos = () => {
               <h2 className="mt-30 page-title">Ventas</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/ventas">
-                    <a>Ventas</a>
-                  </Link>
+                  <Link href="/ventas">Ventas</Link>
                 </li>
                 <li className="breadcrumb-item active">Vista de la venta</li>
               </ol>
@@ -177,6 +173,7 @@ const ViewPedidos = () => {
                                             <td>{index + 1}</td>
                                             <td>
                                               <Link
+                                                legacyBehavior
                                                 href="/productos/[id]/[title]"
                                                 as={`/productos/${
                                                   p.producto._id

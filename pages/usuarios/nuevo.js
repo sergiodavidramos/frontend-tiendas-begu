@@ -173,14 +173,10 @@ const nuevoUsuario = () => {
               <h2 className="mt-30 page-title">Agregar nuevo usuario</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item active">
-                  <Link href="/usuarios">
-                    <a>Usuarios</a>
-                  </Link>
+                  <Link href="/usuarios">Usuarios</Link>
                 </li>
                 <li className="breadcrumb-item active">Nuevo usuario</li>
               </ol>

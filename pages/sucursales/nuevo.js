@@ -197,14 +197,10 @@ const sucursalNuevo = () => {
               <h2 className="mt-30 page-title">Nueva sucursal</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/sucursales">
-                    <a>Sucursales</a>
-                  </Link>
+                  <Link href="/sucursales">Sucursales</Link>
                 </li>
                 <li className="breadcrumb-item active">Agregar sucursal</li>
               </ol>

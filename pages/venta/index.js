@@ -551,9 +551,7 @@ const Venta = () => {
               <h2 className="mt-30 page-title">Venta</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
-                    <a>Tablero</a>
-                  </Link>
+                  <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item active">
                   Ventas de la sucursal ""

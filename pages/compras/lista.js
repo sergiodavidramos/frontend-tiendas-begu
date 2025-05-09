@@ -63,7 +63,7 @@ const ComprasLista = () => {
               <h2 className="mt-30 page-title">Lista de Compras</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>

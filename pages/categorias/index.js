@@ -18,7 +18,7 @@ const Categorias = () => {
               <h2 className="mt-30 page-title">Categorias</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
@@ -26,7 +26,7 @@ const Categorias = () => {
               </ol>
               <div className="row justify-content-between">
                 <div className="col-lg-12">
-                  <Link href="/categorias/nuevo">
+                  <Link legacyBehavior href="/categorias/nuevo">
                     <a className="add-btn hover-btn">Agregar Nueva Categoria</a>
                   </Link>
                 </div>
@@ -68,6 +68,7 @@ const Categorias = () => {
                                     </td>
                                     <td className="action-btns">
                                       <Link
+                                        legacyBehavior
                                         href="/categorias/[id]"
                                         as={`/categorias/${cate._id}`}>
                                         <a className="edit-btn">

@@ -28,12 +28,12 @@ function ProductView({ pro }) {
               <h2 className="mt-30 page-title">Detalle del producto</h2>
               <ol className="breadcrumb mb-30">
                 <li className="breadcrumb-item">
-                  <Link href="/">
+                  <Link legacyBehavior href="/">
                     <a>Tablero</a>
                   </Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/productos">
+                  <Link legacyBehavior href="/productos">
                     <a>Productos</a>
                   </Link>
                 </li>
