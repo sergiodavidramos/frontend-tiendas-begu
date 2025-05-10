@@ -87,8 +87,8 @@ function EditOffer() {
         descuento: target[1].value,
         productos: product,
         status: target[3].value === "0" ? true : false,
-        description: target[5].value,
-        agotarStock: target[6].value === "true" ? true : false,
+        description: target[4].value,
+        agotarStock: target[5].value === "true" ? true : false,
       };
       if (target[6].value === "false") data.fecha = target[7].value;
       fetch(`${API_URL}/offers/${oferta._id}`, {
@@ -280,8 +280,8 @@ function EditOffer() {
               descuento: target[1].value,
               productos: product,
               status: target[3].value === "0" ? true : false,
-              description: target[5].value,
-              agotarStock: target[6].value === "true" ? true : false,
+              description: target[4].value,
+              agotarStock: target[5].value === "true" ? true : false,
             };
             if (target[6].value === "false") data.fecha = target[7].value;
             fetch(`${API_URL}/offers/${oferta._id}`, {
@@ -408,37 +408,7 @@ function EditOffer() {
                                 <option value="1">Inactivo</option>
                               </select>
                             </div>
-                            <div className="form-group">
-                              <label className="form-label">
-                                Imagen de la Oferta*
-                              </label>
-                              <div className="input-group">
-                                <div className="custom-file">
-                                  <input
-                                    type="file"
-                                    className="custom-file-input"
-                                    id="inputGroupFile04"
-                                    aria-describedby="inputGroupFileAddon04"
-                                    onChange={uploadFile}
-                                  />
-                                  <label
-                                    className="custom-file-label"
-                                    htmlFor="inputGroupFile04">
-                                    Elegir Imagen
-                                  </label>
-                                </div>
-                              </div>
-                              <div className="offer-img mt-3">
-                                <img
-                                  src={
-                                    image
-                                      ? image
-                                      : `${API_URL}/upload/oferta/${oferta.img}`
-                                  }
-                                  alt="Oferta"
-                                />
-                              </div>
-                            </div>
+
                             <div className="form-group">
                               <label className="form-label">Descripcion*</label>
                               <div className="card card-editor">

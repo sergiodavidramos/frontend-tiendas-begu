@@ -32,71 +32,45 @@ const OfertaNueva = ({ productos }) => {
     if (selectedOption.length <= 0) {
       notify.show("Por favor seleccione un Producto", "warning", 2000);
     } else {
-      if (image.length < 0) {
-        notify.show(
-          "Por favor seleccione al menos una imagen",
-          "warning",
-          2000
-        );
+      const product = [];
+      selectedOption.map((d) => product.push(d.value));
+      const data = {
+        idSucursal: getAdmSucursal,
+        titulo: target[0].value,
+        descuento: target[1].value,
+        producto: product,
+        status: target[3].value === "true" ? true : false,
+        description: target[4].value,
+        agotarStock: target[5].value === "true" ? true : false,
+      };
+      if (target[6].value === "false") data.fecha = target[7].value;
+      const newOffer = await fetch(`${API_URL}/offers`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const res = await newOffer.json();
+      if (res.status === 401) signOut();
+      if (res.error) {
+        console.log("ERERE", res);
+        notify.show("Error en el servidor", "error", 2000);
       } else {
-        const product = [];
-        selectedOption.map((d) => product.push(d.value));
-        const data = {
-          idSucursal: getAdmSucursal,
-          titulo: target[0].value,
-          descuento: target[1].value,
-          producto: product,
-          status: target[3].value === "true" ? true : false,
-          description: target[5].value,
-          agotarStock: target[6].value === "true" ? true : false,
-        };
-        if (target[6].value === "false") data.fecha = target[7].value;
-        const newOffer = await fetch(`${API_URL}/offers`, {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const res = await newOffer.json();
-        if (res.status === 401) signOut();
-        if (res.error) {
-          console.log("ERERE", res);
-          notify.show("Error en el servidor", "error", 2000);
-        } else {
-          formData.append("imagen", imageUpload);
-          fetch(`${API_URL}/upload/oferta/${res.body._id}`, {
-            method: "PUT",
-            body: formData,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-            .then((response) => response.json())
-            .then((response) => {
-              if (response.error) {
-                notify.show(response.body, "error", 2000);
-              } else {
-                target[0].value = "";
-                target[1].value = "";
-                setSelectedOption([]);
-                target[3].value = true;
-                setImage(null);
-                target[5].value = "";
-                target[6].value = true;
-                target[7].value = "";
-                notify.show("Oferta agregado con Exito! ", "success", 2000);
-              }
-              for (let i = 0; i < product.length; i++) {
-                const result = options.filter((pro) => pro._id != product[i]);
-                options = result;
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-              notify.show("No se pudo subir las imagenes", "error");
-            });
+        target[0].value = "";
+        target[1].value = "";
+        setSelectedOption([]);
+        target[3].value = true;
+        setImage(null);
+        target[4].value = "";
+        target[5].value = true;
+        target[6].value = "";
+        notify.show("Oferta agregado con Exito! ", "success", 2000);
+
+        for (let i = 0; i < product.length; i++) {
+          const result = options.filter((pro) => pro._id != product[i]);
+          options = result;
         }
       }
     }
@@ -225,7 +199,7 @@ const OfertaNueva = ({ productos }) => {
                                 <option value={false}>Inactivo</option>
                               </select>
                             </div>
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <label className="form-label">
                                 Imagen de la Oferta*
                               </label>
@@ -249,7 +223,7 @@ const OfertaNueva = ({ productos }) => {
                               <div className="offer-img mt-3">
                                 {image ? <img src={image} alt="Oferta" /> : ""}
                               </div>
-                            </div>
+                            </div> */}
                             <div className="form-group">
                               <label className="form-label">Descripcion*</label>
                               <div className="card card-editor">

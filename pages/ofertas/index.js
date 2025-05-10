@@ -80,7 +80,6 @@ const Ofertas = () => {
                         <table className="table ucp-table table-hover">
                           <thead>
                             <tr>
-                              <th style={{ width: "100px" }}>Imagen</th>
                               <th>Titulo</th>
                               <th>Descripción</th>
                               <th>Fecha</th>
@@ -96,17 +95,6 @@ const Ofertas = () => {
                             ) : (
                               ofertas.map((offer) => (
                                 <tr key={offer._id}>
-                                  <td>
-                                    <div className="cate-img-6">
-                                      <img
-                                        src={GetImg(
-                                          offer.img,
-                                          `${API_URL}/upload/oferta`
-                                        )}
-                                        alt="cliente-frifolly"
-                                      />
-                                    </div>
-                                  </td>
                                   <td>{offer.titulo}</td>
                                   <td>{offer.description}</td>
                                   <td>

@@ -4,29 +4,36 @@ import SideNav from "../../../components/Navbar/SideNav";
 import Footer from "../../../components/Footer";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
-import moment from "moment";
 import Notifications, { notify } from "react-notify-toast";
 import FormData from "form-data";
 import UserContext from "../../../components/UserContext";
 import { API_URL } from "../../../components/Config";
-const ProductoNuevo = ({ categorias, pro }) => {
+import { useRouter } from "next/router";
+const ProductoNuevo = () => {
   const [token, setToken] = useState(false);
   const { signOut } = useContext(UserContext);
   const [images, setImages] = useState([]);
+  const [categorias, setCategorias] = useState(false);
+  const [pro, setPro] = useState(false);
+
+  const router = useRouter();
   useEffect(() => {
     const tokenLocal = localStorage.getItem("fribar-token");
     const user = localStorage.getItem("fribar-user");
     if (!tokenLocal && !user) {
       signOut();
     }
+
     if (
       JSON.parse(user).role === "GERENTE-ROLE" ||
       JSON.parse(user).role === "ADMIN-ROLE"
     ) {
+      if (router && router.query && router.query.id) {
+        obtenerDatosProductoCategoria(router.query.id);
+      }
     } else signOut();
-    setImages(pro.img);
     setToken(tokenLocal);
-  }, []);
+  }, [router]);
   if (categorias.error === true) {
     categorias.body = [];
   }
@@ -137,6 +144,26 @@ const ProductoNuevo = ({ categorias, pro }) => {
       setImages(fileArray);
     }
   };
+  const obtenerDatosProductoCategoria = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/categoria?status=true`);
+      const categorias = await res.json();
+      const pro = await fetch(`${API_URL}/productos?id=${id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await pro.json();
+      setPro(data.body[0][0]);
+      setCategorias(categorias);
+      setImages(data.body[0][0].img);
+    } catch (err) {
+      notify.show(
+        "Error en el Servidor al obtener los productos y categorias",
+        "error"
+      );
+      console.log("ERROR ", err);
+    }
+  };
   return (
     <>
       <TopNavbar />
@@ -158,174 +185,182 @@ const ProductoNuevo = ({ categorias, pro }) => {
                 <li className="breadcrumb-item active">Agregar producto</li>
               </ol>
 
-              <div className="row">
-                <div className="col-lg-6 col-md-6">
-                  <div className="card card-static-2 mb-30">
-                    <div className="card-title-2">
-                      <h4>Editar Producto</h4>
-                    </div>
-                    <div className="card-body-table">
-                      <form onSubmit={handlerSubmit}>
-                        <div className="news-content-right pd-20">
-                          <div className="form-group">
-                            <label className="form-label">Nombre*</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Nombre del Producto"
-                              defaultValue={pro.name}
-                              required
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Codigo*</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Código del Producto"
-                              defaultValue={pro.code}
-                              required
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Estado*</label>
-                            <select
-                              className="form-control"
-                              defaultValue={pro.status ? "1" : "2"}>
-                              <option value="0">
-                                --Seleccionar Estado del Producto--
-                              </option>
-                              <option value="1">Activo</option>
-                              <option value="2">Inactivo</option>
-                            </select>
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Categoria*</label>
-                            <select
-                              id="categtory"
-                              name="categtory"
-                              className="form-control"
-                              defaultValue={pro.category._id}>
-                              <option value={0}>
-                                --Seleccionar Categoria--
-                              </option>
-                              {categorias.body.map((cate) => (
-                                <option value={cate._id} key={cate._id}>
-                                  {cate.name}
+              {categorias && pro ? (
+                <div className="row">
+                  <div className="col-lg-6 col-md-6">
+                    <div className="card card-static-2 mb-30">
+                      <div className="card-title-2">
+                        <h4>Editar Producto</h4>
+                      </div>
+                      <div className="card-body-table">
+                        <form onSubmit={handlerSubmit}>
+                          <div className="news-content-right pd-20">
+                            <div className="form-group">
+                              <label className="form-label">Nombre*</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Nombre del Producto"
+                                defaultValue={pro.name}
+                                required
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">Codigo*</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Código del Producto"
+                                defaultValue={pro.code}
+                                required
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">Estado*</label>
+                              <select
+                                className="form-control"
+                                defaultValue={pro.status ? "1" : "2"}>
+                                <option value="0">
+                                  --Seleccionar Estado del Producto--
                                 </option>
-                              ))}
-                            </select>
-                          </div>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">Categoria*</label>
+                              <select
+                                id="categtory"
+                                name="categtory"
+                                className="form-control"
+                                defaultValue={pro.category._id}>
+                                <option value={0}>
+                                  --Seleccionar Categoria--
+                                </option>
+                                {categorias.body.map((cate) => (
+                                  <option value={cate._id} key={cate._id}>
+                                    {cate.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
 
-                          <div className="form-group">
-                            <label className="form-label">Stock*</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              placeholder="Cantidad disponible"
-                              required
-                              defaultValue={pro.stock}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Precio Compra*</label>
-                            <input
-                              step="any"
-                              type="number"
-                              className="form-control"
-                              placeholder="Bs 0"
-                              defaultValue={pro.precioCompra}
-                              required
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Precio Venta*</label>
-                            <input
-                              step="any"
-                              type="number"
-                              className="form-control"
-                              placeholder="Bs 0"
-                              defaultValue={pro.precioVenta}
-                              required
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Descripción*</label>
-                            <textarea
-                              type="textarea"
-                              className="form-control"
-                              defaultValue={pro.detail}
-                              required
-                            />
-                            <div className="card card-editor">
-                              <div className="content-editor">
-                                <div id="edit"></div>
+                            <div className="form-group">
+                              <label className="form-label">Stock*</label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Cantidad disponible"
+                                required
+                                defaultValue={pro.stock}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">
+                                Precio Compra*
+                              </label>
+                              <input
+                                step="any"
+                                type="number"
+                                className="form-control"
+                                placeholder="Bs 0"
+                                defaultValue={pro.precioCompra}
+                                required
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">
+                                Precio Venta*
+                              </label>
+                              <input
+                                step="any"
+                                type="number"
+                                className="form-control"
+                                placeholder="Bs 0"
+                                defaultValue={pro.precioVenta}
+                                required
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label className="form-label">Descripción*</label>
+                              <textarea
+                                type="textarea"
+                                className="form-control"
+                                defaultValue={pro.detail}
+                                required
+                              />
+                              <div className="card card-editor">
+                                <div className="content-editor">
+                                  <div id="edit"></div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Tipo Venta*</label>
-                            <select
-                              id="venta"
-                              name="venta"
-                              className="form-control"
-                              defaultValue={pro.tipoVenta}>
-                              <option value={"Kilos"}>Por Kilos</option>
-                              <option value={"Unidad"}>Por Unidad</option>
-                            </select>
-                          </div>
-                          <div className="form-group">
-                            <label className="form-label">Images*</label>
-                            <div className="input-group">
-                              <div className="custom-file">
-                                <input
-                                  type="file"
-                                  className="custom-file-input"
-                                  id="inputGroupFile05"
-                                  aria-describedby="inputGroupFileAddon05"
-                                  multiple
-                                  onChange={uploadMultipleFile}
-                                  accept="image/x-png,image/gif,image/jpeg"
-                                />
-                                <label
-                                  className="custom-file-label"
-                                  htmlFor="inputGroupFile05">
-                                  Seleccione Images
-                                </label>
-                              </div>
+                            <div className="form-group">
+                              <label className="form-label">Tipo Venta*</label>
+                              <select
+                                id="venta"
+                                name="venta"
+                                className="form-control"
+                                defaultValue={pro.tipoVenta}>
+                                <option value={"Kilos"}>Por Kilos</option>
+                                <option value={"Unidad"}>Por Unidad</option>
+                              </select>
                             </div>
-                            <ul className="add-produc-imgs">
-                              {images.map((url) => (
-                                <li key={url}>
-                                  <div
-                                    className="add-cate-img-1"
+                            <div className="form-group">
+                              <label className="form-label">Images*</label>
+                              <div className="input-group">
+                                <div className="custom-file">
+                                  <input
+                                    type="file"
+                                    className="custom-file-input"
+                                    id="inputGroupFile05"
+                                    aria-describedby="inputGroupFileAddon05"
+                                    multiple
+                                    onChange={uploadMultipleFile}
+                                    accept="image/x-png,image/gif,image/jpeg"
+                                  />
+                                  <label
+                                    className="custom-file-label"
                                     htmlFor="inputGroupFile05">
-                                    <img
-                                      src={
-                                        im
-                                          ? url
-                                          : `${API_URL}/upload/producto/${url}`
-                                      }
-                                      alt="Seleecione una imagen de producto frifolly"
-                                    />
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                                    Seleccione Images
+                                  </label>
+                                </div>
+                              </div>
+                              <ul className="add-produc-imgs">
+                                {images.map((url) => (
+                                  <li key={url}>
+                                    <div
+                                      className="add-cate-img-1"
+                                      htmlFor="inputGroupFile05">
+                                      <img
+                                        src={
+                                          im
+                                            ? url
+                                            : `${API_URL}/upload/producto/${url}`
+                                        }
+                                        alt="Seleecione una imagen de producto frifolly"
+                                      />
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
 
-                          <button
-                            disabled={butt}
-                            className="save-btn hover-btn"
-                            type="submit">
-                            Editar Producto
-                          </button>
-                        </div>
-                      </form>
+                            <button
+                              disabled={butt}
+                              className="save-btn hover-btn"
+                              type="submit">
+                              Editar Producto
+                            </button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
           </main>
           <Footer />
@@ -334,49 +369,4 @@ const ProductoNuevo = ({ categorias, pro }) => {
     </>
   );
 };
-
-export async function getStaticPaths() {
-  const pro = await fetch(`${API_URL}/productos/all`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-  const temp = await pro.json();
-  const paths = temp.body.map((pro) => ({
-    params: {
-      id: pro._id,
-    },
-  }));
-  return {
-    paths,
-    fallback: false,
-  };
-}
-
-export async function getStaticProps({ params }) {
-  try {
-    const res = await fetch(`${API_URL}/categoria?status=true`);
-    const categorias = await res.json();
-    const pro = await fetch(`${API_URL}/productos?id=${params.id}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await pro.json();
-    return {
-      props: {
-        categorias,
-        pro: data.body[0][0],
-      },
-      revalidate: 1,
-    };
-  } catch (err) {
-    const categorias = { error: true };
-    return {
-      props: {
-        categorias,
-      },
-      revalidate: 1,
-    };
-  }
-}
-
 export default ProductoNuevo;
