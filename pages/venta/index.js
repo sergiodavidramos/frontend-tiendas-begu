@@ -278,12 +278,13 @@ const Venta = () => {
       return;
     }
     if (!efectivo.current.value) {
-      notify.show(
-        "Por favor el efectivo cancelado por en cliente es necesario",
-        "warning"
-      );
-      textBusqueda.current.focus();
-      return;
+      efectivo.current.value = total;
+      //   notify.show(
+      //     "Por favor el efectivo cancelado por en cliente es necesario",
+      //     "warning"
+      //   );
+      //   textBusqueda.current.focus();
+      //   return;
     }
     for (let producto of productFilter) {
       const precioConDescuento =
