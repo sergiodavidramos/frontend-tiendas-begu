@@ -88,7 +88,7 @@ const ProveedorNuevo = () => {
                   <Link href="/">Tablero</Link>
                 </li>
                 <li className="breadcrumb-item">
-                  <Link href="/ciudades">Proveedor</Link>
+                  <Link href="/proveedor">Proveedor</Link>
                 </li>
                 <li className="breadcrumb-item active">Agregar proveedor</li>
               </ol>

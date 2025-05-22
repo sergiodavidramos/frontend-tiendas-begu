@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef, useEffect } from "react";
 import expectedRound from "expected-round";
 const FilaVenta = ({
@@ -9,13 +10,16 @@ const FilaVenta = ({
   efectivo,
   ciCliente,
   botonConfirmarVenta,
-  inputCantidad,
+  //   inputCantidad,
 }) => {
   const [cantidad, setCa] = useState(pro.cantidad);
+  const inputCantidad = useRef(null);
 
   const precioConDescuento =
     pro.precioVenta - (pro.descuento * pro.precioVenta) / 100;
-
+  useEffect(() => {
+    setCa(pro.cantidad);
+  }, [pro.cantidad]);
   const handlerCantidad = (event) => {
     setCa(event.target.value);
     setCantidad(index, event.target.value);
@@ -60,11 +64,11 @@ const FilaVenta = ({
           ref={inputCantidad}
           type="number"
           className="check-item"
-          defaultValue={cantidad}
           min={pro.tipoVenta === "Unidad" ? "1" : "0.25"}
           step={pro.tipoVenta === "Unidad" ? "1" : "0.25"}
           onInput={handlerCantidad}
           onKeyDown={escucharTeclado}
+          value={cantidad}
         />
       </td>
       {pro.tipoVenta === "Kilos" ? (

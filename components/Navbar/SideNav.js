@@ -530,6 +530,20 @@ const SideNav = (props) => {
                     </a>
                   </Link>
                 )}
+                {(user.role === "GERENTE-ROLE" ||
+                  user.role === "ADMIN-ROLE") && (
+                  <Link legacyBehavior href={"/puntos"}>
+                    <a
+                      className={`nav-link ${
+                        props.router.pathname === "/puntos" ? "active" : ""
+                      }`}>
+                      <div className="sb-nav-link-icon">
+                        <i className="fas fa-plus-circle"></i>
+                      </div>
+                      Valor de los Puntos
+                    </a>
+                  </Link>
+                )}
               </div>
             </div>
           </nav>

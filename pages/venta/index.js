@@ -1,3 +1,4 @@
+"use client";
 import TopNavbar from "../../components/Navbar";
 import SideNav from "../../components/Navbar/SideNav";
 import Footer from "../../components/Footer";
@@ -27,7 +28,7 @@ const Venta = () => {
   const ciCliente = useRef(false);
   const efectivo = useRef(0);
   const botonConfirmarVenta = useRef(null);
-  const inputCantidad = useRef(null);
+
   const inputRef = useRef(null);
 
   const [idCliente, setIdCliente] = useState(false);
@@ -675,7 +676,7 @@ const Venta = () => {
                                   efectivo={efectivo}
                                   ciCliente={ciCliente}
                                   botonConfirmarVenta={botonConfirmarVenta}
-                                  inputCantidad={inputCantidad}
+                                  //   inputCantidad={inputCantidad}
                                 />
                               ))
                             )}

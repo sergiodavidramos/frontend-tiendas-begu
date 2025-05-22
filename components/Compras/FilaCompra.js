@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
-import expectedRound from 'expected-round'
-import moment from 'moment'
+import { useState, useRef, useEffect } from "react";
+import expectedRound from "expected-round";
+import moment from "moment";
 const FilaVenta = ({
   pro,
   setCantidad,
@@ -13,50 +13,48 @@ const FilaVenta = ({
   actualizarNumeroLote,
   actualizarFechaVencimiento,
 }) => {
-  const [cantidad, setCa] = useState(pro.cantidad)
-  const [precioCompra, setPrecioCompra] = useState(pro.precioCompra)
-  const [precioVenta, setPrecioVenta] = useState(pro.precioVenta)
-  const [tieneLote, setTieneLote] = useState(false)
+  const [cantidad, setCa] = useState(pro.cantidad);
+  const [precioCompra, setPrecioCompra] = useState(pro.precioCompra);
+  const [precioVenta, setPrecioVenta] = useState(pro.precioVenta);
+  const [tieneLote, setTieneLote] = useState(false);
 
-  const textCantidad = useRef(null)
+  const textCantidad = useRef(null);
 
   useEffect(() => {
-    textCantidad.current.focus()
-  }, [])
+    setCa(pro.cantidad);
+    textCantidad.current.focus();
+  }, [pro.cantidad]);
   const handlerCantidad = (event) => {
-    setCa(event.target.value)
-    setCantidad(index, event.target.value)
-  }
+    setCa(event.target.value);
+    setCantidad(index, event.target.value);
+  };
   const handlerDeleteProduct = () => {
-    deleteProduct(index)
-  }
+    deleteProduct(index);
+  };
   function obtenerTeclado(event) {
-    var codigo = event.key
-    if (codigo === 'Tab') {
-      setfocus(true)
+    var codigo = event.key;
+    if (codigo === "Tab") {
+      setfocus(true);
     }
   }
   const handlerPrecioCompra = (event) => {
-    setPrecioCompra(event.target.value)
-    actualizarPrecioCompra(index, event.target.value)
-  }
+    setPrecioCompra(event.target.value);
+    actualizarPrecioCompra(index, event.target.value);
+  };
   const handlerPrecioVenta = (event) => {
-    setPrecioVenta(event.target.value)
-    actualizarPrecioVenta(index, event.target.value)
-  }
+    setPrecioVenta(event.target.value);
+    actualizarPrecioVenta(index, event.target.value);
+  };
   const handlerTieneLote = (event) => {
-    setTieneLote(event.target.value === 'true' ? true : false)
-    actualizarTieneLote(
-      index,
-      event.target.value === 'true' ? true : false
-    )
-  }
+    setTieneLote(event.target.value === "true" ? true : false);
+    actualizarTieneLote(index, event.target.value === "true" ? true : false);
+  };
   const handlerNumeroFactura = (event) => {
-    actualizarNumeroLote(index, event.target.value)
-  }
+    actualizarNumeroLote(index, event.target.value);
+  };
   const handlerFechaVencimiento = (event) => {
-    actualizarFechaVencimiento(index, event.target.value)
-  }
+    actualizarFechaVencimiento(index, event.target.value);
+  };
 
   return (
     <tr>
@@ -64,9 +62,9 @@ const FilaVenta = ({
         <input
           ref={textCantidad}
           type="number"
-          style={{ width: '100px' }}
+          style={{ width: "100px" }}
           className="check-item"
-          defaultValue={cantidad}
+          value={cantidad}
           min="1"
           onInput={handlerCantidad}
           onKeyDown={obtenerTeclado}
@@ -77,21 +75,21 @@ const FilaVenta = ({
         <input
           type="number"
           className="check-item"
-          style={{ width: '100px' }}
+          style={{ width: "100px" }}
           defaultValue={precioCompra}
           min="1"
           onInput={handlerPrecioCompra}
         />
       </td>
       <td>
-        {(
-          pro.cantidad * expectedRound.round10(pro.precioCompra, -1)
-        ).toFixed(2)}
+        {(pro.cantidad * expectedRound.round10(pro.precioCompra, -1)).toFixed(
+          2
+        )}
       </td>
       <td>
-        {' '}
+        {" "}
         <input
-          style={{ width: '100px' }}
+          style={{ width: "100px" }}
           type="number"
           className="check-item"
           defaultValue={precioVenta}
@@ -103,16 +101,15 @@ const FilaVenta = ({
         <select
           className="form-control"
           defaultValue={tieneLote}
-          onChange={handlerTieneLote}
-        >
+          onChange={handlerTieneLote}>
           <option value={true}>Si</option>
           <option value={false}>No</option>
         </select>
       </td>
       <td>
-        {' '}
+        {" "}
         <input
-          style={{ width: '100px' }}
+          style={{ width: "100px" }}
           type="text"
           className="check-item"
           disabled={!tieneLote}
@@ -123,7 +120,7 @@ const FilaVenta = ({
         <input
           type="date"
           className="form-control"
-          defaultValue={moment().format('YYYY-MM-DD')}
+          defaultValue={moment().format("YYYY-MM-DD")}
           disabled={!tieneLote}
           onInput={handlerFechaVencimiento}
         />
@@ -134,7 +131,7 @@ const FilaVenta = ({
         </a>
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export default FilaVenta
+export default FilaVenta;

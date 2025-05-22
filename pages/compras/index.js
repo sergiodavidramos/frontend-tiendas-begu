@@ -32,7 +32,11 @@ const Compras = ({ categorias, marcas }) => {
   const [totalCambio, setTotalCambio] = useState(0);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [idProveedor, setIdProveedor] = useState(false);
-
+  const [buscarPorNombre, setBuscarPorNombre] = useState(false);
+  const [autocompleteState, setAutocompleteState] = useState({
+    collections: [],
+    isOpen: false,
+  });
   const [butt, setButt] = useState(false);
 
   useEffect(() => {
@@ -65,7 +69,7 @@ const Compras = ({ categorias, marcas }) => {
             notify.show(data.body, "error");
             setBuscarText("");
           } else {
-            if (data.body !== null) {
+            if (data.status === 200 && data.body !== null) {
               setMostrarFormulario(false);
               setBuscarText("");
               if (productFilter.length > 0) {
@@ -205,18 +209,17 @@ const Compras = ({ categorias, marcas }) => {
     else setTotalCambio(0);
   };
   function confirmarCompra() {
-    if (
-      !idProveedor ||
-      !numeroFactura.current.value ||
-      !numeroFactura.current.value === "" ||
-      productFilter <= 0
-    )
-      return notify.show("Todos los datos son necesarios", "warning");
-    if (!efectivo.current.value || !efectivo.current.value === "")
-      return notify.show(
-        "Por favor asigne la cantidad de efectivo pagado por la compra",
-        "warning"
-      );
+    if (productFilter <= 0)
+      return notify.show("Por favor seleccione un producto", "warning");
+    if (!idProveedor)
+      return notify.show("Por favor seleccione un proveedor", "warning");
+    if (!numeroFactura.current.value || !numeroFactura.current.value === "")
+      numeroFactura.current.value === 1;
+    if (!efectivo.current.value) efectivo.current.value === total;
+    //   return notify.show(
+    //     "Por favor asigne la cantidad de efectivo pagado por la compra",
+    //     "warning"
+    //   );
     let detalle = [];
     for (let producto of productFilter) {
       delete producto.detail;
@@ -272,6 +275,64 @@ const Compras = ({ categorias, marcas }) => {
       });
   }
 
+  async function handlerSearch() {
+    if (event.target.value && token && event.target.value.length > 0) {
+      const u = await fetch(
+        `${API_URL}/productos/buscar/${event.target.value}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) notify.show(data.body, "error");
+          else {
+            if (data.body.length > 0) {
+              setAutocompleteState({
+                collections: data.body,
+                isOpen: true,
+              });
+            } else
+              setAutocompleteState({
+                collections: data.body,
+                isOpen: false,
+              });
+          }
+        })
+        .catch((err) => console.log("Error al buscar producto", err));
+    } else {
+      setAutocompleteState({
+        collections: [],
+        isOpen: false,
+      });
+    }
+  }
+  function handlerClick(producto) {
+    inputRef.current.value = "";
+    setAutocompleteState({ isOpen: false });
+    if (productFilter.length > 0) {
+      arrayHandlerProduct(producto);
+    } else {
+      let pro = producto;
+      pro.cantidad = 1;
+      setProductFilter([pro]);
+      notify.show(`Producto Agregado`, "success", 900);
+      const precioConDescuento =
+        pro.precioVenta - (pro.descuento * pro.precioVenta) / 100;
+      setTotal(
+        pro.descuento > 0
+          ? (
+              pro.cantidad * expectedRound.round10(precioConDescuento, -1)
+            ).toFixed(2)
+          : pro.cantidad * pro.precioVenta
+      );
+    }
+  }
+
   return (
     <>
       <ConfirmacionModel
@@ -302,6 +363,21 @@ const Compras = ({ categorias, marcas }) => {
               ) : (
                 <div className="row justify-content-between">
                   <div className="col-lg-12 col-md-12">
+                    <div className="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        className="custom-control-input"
+                        id="customCheck1"
+                        onChange={(e) => {
+                          setBuscarPorNombre(e.target.checked);
+                        }}
+                      />
+                      <label
+                        className="custom-control-label"
+                        htmlFor="customCheck1">
+                        Buscar por nombre
+                      </label>
+                    </div>
                     <div className="card card-static-2 mb-30">
                       <div className="row justify-content-center">
                         <div className="search-by-name-input">
@@ -309,11 +385,56 @@ const Compras = ({ categorias, marcas }) => {
                             ref={textBusqueda}
                             value={buscarText}
                             type="text"
-                            className="form-control"
-                            placeholder="Buscar Producto"
+                            placeholder="Buscar Producto por Codigo"
                             onChange={handlerChange}
+                            style={{
+                              border: "1px solid transparent",
+                              backgroundColor: "#f1f1f1",
+                              padding: "10px",
+                              fontSize: "16px",
+                              width: "100%",
+                            }}
                           />
                         </div>
+                        {buscarPorNombre ? (
+                          <div className="search-by-name-input">
+                            <div
+                              className="autocomplete"
+                              style={{ width: "100%" }}>
+                              <input
+                                ref={inputRef}
+                                id="myInput"
+                                type="text"
+                                name="myAdmin"
+                                placeholder="Buscar Producto por Nombre"
+                                onChange={handlerSearch}
+                                autoComplete="off"
+                              />
+                              {autocompleteState.isOpen && (
+                                <div
+                                  id="myInputautocomplete-list"
+                                  className="autocomplete-items">
+                                  {autocompleteState.collections.map(
+                                    (datos, index) => (
+                                      <ul key={index} className="list-group">
+                                        <li
+                                          className="list-group-item"
+                                          style={{ cursor: "pointer" }}
+                                          onClick={() => handlerClick(datos)}>
+                                          <a>
+                                            <strong>{datos.name}</strong>
+                                          </a>
+                                        </li>
+                                      </ul>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                     {mostrarFormulario && (
@@ -479,6 +600,66 @@ const Compras = ({ categorias, marcas }) => {
           <Footer />
         </div>
       </div>
+      <style jsx>
+        {`
+          * {
+            box-sizing: border-box;
+          }
+          body {
+            font: 16px Arial;
+          }
+          .autocomplete {
+            /*the container must be positioned relative:*/
+            position: relative;
+            display: inline-block;
+          }
+          input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+          }
+          input[type="text"] {
+            background-color: #f1f1f1;
+            width: 100%;
+          }
+          input[type="submit"] {
+            background-color: DodgerBlue;
+            color: #fff;
+          }
+          .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+          }
+          .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+          }
+          .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
+          }
+          .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+          }
+
+          .list-group-item:hover {
+            background-color: #e9e9e9 !important;
+          }
+        `}
+      </style>
     </>
   );
 };
