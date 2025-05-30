@@ -5,7 +5,6 @@ import Footer from "../../components/Footer";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
 import Notifications, { notify } from "react-notify-toast";
-import FormData from "form-data";
 import UserContext from "../../components/UserContext";
 import { API_URL } from "../../components/Config";
 const CategoriaNuevo = () => {

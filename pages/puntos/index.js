@@ -184,6 +184,7 @@ const Puntos = () => {
                               placeholder="Agregar valor de los puntos"
                               required
                               min="0.1"
+                              step="0.1"
                               defaultValue={
                                 puntosRegistrado ? puntosValor[0].valor : ""
                               }
