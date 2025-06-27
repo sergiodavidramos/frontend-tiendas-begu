@@ -359,27 +359,29 @@ const Venta = () => {
                   "Content-Type": "application/json",
                 },
               })
-                .then(async (res) => ({
-                  blob: await res.blob(),
-                }))
+                .then((res) => {
+                  return res.json();
+                  //   blob: await res.blob(),
+                })
                 .then((resObj) => {
-                  notify.show("Venta realizada con exito!", "success", 2000);
+                  notify.show("Venta realizada con exito!", "success", 3000);
                   // It is necessary to create a new blob object with mime-type explicitly set for all browsers except Chrome, but it works for Chrome too.
-                  const newBlob = new Blob([resObj.blob], {
-                    type: "application/pdf",
-                  });
-                  // MS Edge and IE don't allow using a blob object directly as link href, instead it is necessary to use msSaveOrOpenBlob
-                  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveOrOpenBlob(newBlob);
-                  } else {
-                    setButt(false);
-                    // For other browsers: create a link pointing to the ObjectURL containing the blob.
-                    const objUrl = window.URL.createObjectURL(newBlob);
+                  //   const newBlob = new Blob([resObj.blob], {
+                  //     type: "application/pdf",
+                  //   });
+                  //   // MS Edge and IE don't allow using a blob object directly as link href, instead it is necessary to use msSaveOrOpenBlob
+                  //   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                  //     window.navigator.msSaveOrOpenBlob(newBlob);
+                  //   } else {
+                  //     setButt(false);
+                  //     // For other browsers: create a link pointing to the ObjectURL containing the blob.
+                  //     const objUrl = window.URL.createObjectURL(newBlob);
 
-                    const windowFeatures =
-                      "left=100,top=100,width=320,height=900";
-                    var win = window.open(objUrl, "mozillaTab", windowFeatures);
-                  }
+                  //     const windowFeatures =
+                  //       "left=100,top=100,width=320,height=900";
+                  //     var win = window.open(objUrl, "mozillaTab", windowFeatures);
+                  //   }
+                  setButt(false);
                   setProductFilter([]);
                   setTotal(0);
                   setTotalCambio(0);
@@ -415,22 +417,23 @@ const Venta = () => {
           blob: await res.blob(),
         }))
         .then((resObj) => {
-          notify.show("Venta realizada con exito!", "success", 2000);
+          notify.show("Venta realizada con exito!", "success", 3000);
           // It is necessary to create a new blob object with mime-type explicitly set for all browsers except Chrome, but it works for Chrome too.
-          const newBlob = new Blob([resObj.blob], {
-            type: "application/pdf",
-          });
-          // MS Edge and IE don't allow using a blob object directly as link href, instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
-          } else {
-            setButt(false);
-            // For other browsers: create a link pointing to the ObjectURL containing the blob.
-            const objUrl = window.URL.createObjectURL(newBlob);
+          //   const newBlob = new Blob([resObj.blob], {
+          //     type: "application/pdf",
+          //   });
+          //   // MS Edge and IE don't allow using a blob object directly as link href, instead it is necessary to use msSaveOrOpenBlob
+          //   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          //     window.navigator.msSaveOrOpenBlob(newBlob);
+          //   } else {
+          //     setButt(false);
+          //     // For other browsers: create a link pointing to the ObjectURL containing the blob.
+          //     const objUrl = window.URL.createObjectURL(newBlob);
 
-            const windowFeatures = "left=100,top=100,width=320,height=900";
-            var win = window.open(objUrl, "mozillaTab", windowFeatures);
-          }
+          //     const windowFeatures = "left=100,top=100,width=320,height=900";
+          //     var win = window.open(objUrl, "mozillaTab", windowFeatures);
+          //   }
+          setButt(false);
           setProductFilter([]);
           setTotal(0);
           setTotalCambio(0);
