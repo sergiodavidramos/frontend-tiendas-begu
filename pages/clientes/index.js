@@ -21,7 +21,7 @@ const Clientes = () => {
     setPageState(page.selected);
   }
   function getUserAPi(tokenLocal) {
-    fetch(`${API_URL}/user?desde=${pageState * 10}&limite=${10}`, {
+    fetch(`${API_URL}/person`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${tokenLocal}`,
@@ -38,8 +38,9 @@ const Clientes = () => {
         if (data.error) {
           notify.show("Error el en servidor", "error");
         } else {
-          setClientes(data.body[0]);
-          setCount(data.body[1]);
+          console.log(data);
+          setClientes(data.body.persons);
+          setCount(data.body.persons);
         }
       })
       .catch((error) => notify.show("Error en el servidor", "error", 2000));
@@ -78,7 +79,7 @@ const Clientes = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       )
         .then((res) => {
           if (res.status === 401) {
@@ -195,12 +196,10 @@ const Clientes = () => {
                         <table className="table ucp-table table-hover">
                           <thead>
                             <tr>
-                              <th style={{ width: "60px" }}>ID</th>
-                              <th style={{ width: "100px" }}>Imagen</th>
+                              <th>C.I.</th>
                               <th>Nombre</th>
-                              <th>Email</th>
-                              <th>Telefono</th>
-                              <th>Estado</th>
+                              <th>Puntos</th>
+                              <th>Compras</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -212,32 +211,11 @@ const Clientes = () => {
                             ) : (
                               clientes.map((cli) => (
                                 <tr key={cli._id}>
-                                  <td>{cli._id}</td>
-                                  <td>
-                                    <div className="cate-img-6">
-                                      <img
-                                        src={GetImg(
-                                          cli.img,
-                                          `${API_URL}/upload/user`
-                                        )}
-                                        alt="cliente-fribar"
-                                      />
-                                    </div>
-                                  </td>
-                                  <td>{cli.idPersona.nombre_comp}</td>
-                                  <td>{cli.email}</td>
-                                  <td>{cli.phone}</td>
-                                  <td>
-                                    {cli.status ? (
-                                      <span className="badge-item badge-status">
-                                        Activo
-                                      </span>
-                                    ) : (
-                                      <span className="badge-item badge-status-false">
-                                        Inactivo
-                                      </span>
-                                    )}
-                                  </td>
+                                  <td>{cli.ci}</td>
+                                  <td>{cli.nombre_comp}</td>
+                                  <td>{cli.puntos}</td>
+                                  <td>{cli.compras}</td>
+
                                   <td className="action-btns">
                                     <Link
                                       legacyBehavior

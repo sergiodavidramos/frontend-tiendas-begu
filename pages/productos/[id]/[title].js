@@ -70,12 +70,6 @@ function ProductView() {
                     <div className="card card-static-2 mb-30">
                       <div className="card-body-table">
                         <div className="shopowner-content-left text-center pd-20">
-                          <div className="shop_img">
-                            <img
-                              src={`${API_URL}/upload/producto/${pro.img[0]}`}
-                              alt=""
-                            />
-                          </div>
                           <ul className="product-dt-purchases">
                             <li>
                               <div className="product-status">

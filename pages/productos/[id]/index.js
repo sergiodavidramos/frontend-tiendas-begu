@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 const ProductoNuevo = () => {
   const [token, setToken] = useState(false);
   const { signOut } = useContext(UserContext);
-  const [images, setImages] = useState([]);
+
   const [categorias, setCategorias] = useState(false);
   const [pro, setPro] = useState(false);
 
@@ -48,102 +48,44 @@ const ProductoNuevo = () => {
     if (target[1].value === "0") {
       notify.show("Por favor seleccione una Categoria", "warning", 2000);
     } else {
-      if (images.length < 0) {
-        notify.show(
-          "Por favor seleccione al menos una imagen",
-          "warning",
-          2000
-        );
-      } else {
-        setButt(true);
-        fetch(`${API_URL}/productos/${pro._id}`, {
-          method: "PATCH",
-          body: JSON.stringify({
-            name: target[0].value,
-            code: target[1].value,
-            status: target[2].value === "1" ? true : false,
-            category: target[3].value,
-            stock: target[4].value,
-            precioCompra: target[5].value,
-            precioVenta: target[6].value,
-            detail: target[7].value,
-            tipoVenta: target[8].value,
-          }),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+      setButt(true);
+      fetch(`${API_URL}/productos/${pro._id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: target[0].value,
+          code: target[1].value,
+          status: target[2].value === "1" ? true : false,
+          category: target[3].value,
+          precioCompra: target[4].value,
+          precioVenta: target[5].value,
+          detail: target[6].value,
+          tipoVenta: target[7].value,
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.status === 401) signOut();
+          return res.json();
         })
-          .then((res) => {
-            if (res.status === 401) signOut();
-            return res.json();
-          })
-          .then((response) => {
-            if (response.error) {
-              notify.show(response.body, "error", 2000);
-              setButt(false);
-            } else {
-              if (im) {
-                if (im.length < 4) {
-                  for (const file of im) formData.append("imagen", file);
-                } else
-                  for (let i = 0; i < 4; i++) {
-                    formData.append("imagen", im[i]);
-                  }
-                fetch(`${API_URL}/upload/producto/${response.body._id}`, {
-                  method: "PUT",
-                  body: formData,
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                })
-                  .then((response) => response.json())
-                  .then((response) => {
-                    if (response.error) {
-                      notify.show(response.body, "error", 2000);
-                      setButt(false);
-                    } else {
-                      notify.show(
-                        "Producto agregado con Exito! ",
-                        "success",
-                        2000
-                      );
-                      setButt(false);
-                    }
-                  })
-                  .catch((error) => {
-                    notify.show("No se pudo subir las imagenes", "error");
-                    setButt(false);
-                  });
-              } else {
-                notify.show("Producto agregado con Exito! ", "success", 2000);
-                setButt(false);
-              }
-            }
-          })
-          .catch((error) => {
-            notify.show("Error en el Servidor", "error");
+        .then((response) => {
+          if (response.error) {
+            notify.show(response.body, "error", 2000);
             setButt(false);
-          });
-      }
+          } else {
+            notify.show("Producto agregado con Exito! ", "success", 2000);
+            setButt(false);
+          }
+        })
+        .catch((error) => {
+          notify.show("Error en el Servidor", "error");
+          setButt(false);
+        });
     }
   };
-  const uploadMultipleFile = (e) => {
-    fileObj.push(e.target.files);
-    setIm(e.target.files);
-    if (fileObj[0].length <= 4) {
-      for (let i = 0; i < fileObj[0].length; i++) {
-        fileArray.push(URL.createObjectURL(fileObj[0][i]));
-      }
-      setImages(fileArray);
-    } else {
-      notify.show("Solo puede seleccionar 4 imagenes", "warning", 2000);
-      for (let i = 0; i < 4; i++) {
-        fileArray.push(URL.createObjectURL(fileObj[0][i]));
-      }
-      setImages(fileArray);
-    }
-  };
+
   const obtenerDatosProductoCategoria = async (id) => {
     try {
       const res = await fetch(`${API_URL}/categoria?status=true`);
@@ -155,11 +97,10 @@ const ProductoNuevo = () => {
       const data = await pro.json();
       setPro(data.body[0][0]);
       setCategorias(categorias);
-      setImages(data.body[0][0].img);
     } catch (err) {
       notify.show(
         "Error en el Servidor al obtener los productos y categorias",
-        "error"
+        "error",
       );
       console.log("ERROR ", err);
     }
@@ -244,17 +185,6 @@ const ProductoNuevo = () => {
                                 ))}
                               </select>
                             </div>
-
-                            <div className="form-group">
-                              <label className="form-label">Stock*</label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                placeholder="Cantidad disponible"
-                                required
-                                defaultValue={pro.stock}
-                              />
-                            </div>
                             <div className="form-group">
                               <label className="form-label">
                                 Precio Compra*
@@ -305,45 +235,6 @@ const ProductoNuevo = () => {
                                 <option value={"Kilos"}>Por Kilos</option>
                                 <option value={"Unidad"}>Por Unidad</option>
                               </select>
-                            </div>
-                            <div className="form-group">
-                              <label className="form-label">Images*</label>
-                              <div className="input-group">
-                                <div className="custom-file">
-                                  <input
-                                    type="file"
-                                    className="custom-file-input"
-                                    id="inputGroupFile05"
-                                    aria-describedby="inputGroupFileAddon05"
-                                    multiple
-                                    onChange={uploadMultipleFile}
-                                    accept="image/x-png,image/gif,image/jpeg"
-                                  />
-                                  <label
-                                    className="custom-file-label"
-                                    htmlFor="inputGroupFile05">
-                                    Seleccione Images
-                                  </label>
-                                </div>
-                              </div>
-                              <ul className="add-produc-imgs">
-                                {images.map((url) => (
-                                  <li key={url}>
-                                    <div
-                                      className="add-cate-img-1"
-                                      htmlFor="inputGroupFile05">
-                                      <img
-                                        src={
-                                          im
-                                            ? url
-                                            : `${API_URL}/upload/producto/${url}`
-                                        }
-                                        alt="Seleecione una imagen de producto frifolly"
-                                      />
-                                    </div>
-                                  </li>
-                                ))}
-                              </ul>
                             </div>
 
                             <button

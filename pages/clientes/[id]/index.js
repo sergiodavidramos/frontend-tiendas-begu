@@ -29,7 +29,7 @@ const viewClient = () => {
     } else signOut();
     if (!client && router && router.query && router.query.id) {
       const { id } = router.query;
-      fetch(`${API_URL}/user?id=${id}`, {
+      fetch(`${API_URL}/person?id=${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${tokenLocal}`,
@@ -44,14 +44,15 @@ const viewClient = () => {
         })
         .then((data) => {
           if (data.error) {
-            notify.show("Error en el servidor", "error", 2000);
+            notify.show("Error en el servidor cliente", "error", 2000);
           } else {
-            setCliente(data.body[0][0]);
+            console.log(data);
+            setCliente(data.body.persons[0]);
           }
         })
         .catch((error) => {
           console.log("SSSSS", error);
-          notify.show("Error en el servidor", "error", 2000);
+          notify.show("Error en el servidor Cli", "error", 2000);
         });
     }
   }, [router]);
@@ -86,12 +87,6 @@ const viewClient = () => {
                     <div className="card card-static-2 mb-30">
                       <div className="card-body-table">
                         <div className="shopowner-content-left text-center pd-20">
-                          <div className="customer_img">
-                            <img
-                              src={GetImg(client.img, `${API_URL}/upload/user`)}
-                              alt="cliente-Fribar"
-                            />
-                          </div>
                           <div className="shopowner-dt-left mt-4">
                             <h4>{client.nombre_comp}</h4>
                             <span>{client.role}</span>
@@ -101,7 +96,7 @@ const viewClient = () => {
                               <div className="product-status">
                                 Compras
                                 <span className="badge-item-2 badge-status">
-                                  {client.idPersona.compras}
+                                  {client.compras}
                                 </span>
                               </div>
                             </li>
@@ -109,7 +104,7 @@ const viewClient = () => {
                               <div className="product-status">
                                 Puntos
                                 <span className="badge-item-2 badge-status">
-                                  {client.idPersona.puntos}
+                                  {client.puntos}
                                 </span>
                               </div>
                             </li>
@@ -118,32 +113,16 @@ const viewClient = () => {
                             <div className="shopowner-dt-list">
                               <span className="left-dt">Nombre</span>
                               <span className="right-dt">
-                                {client.idPersona.nombre_comp}
+                                {client.nombre_comp}
                               </span>
                             </div>
                             <div className="shopowner-dt-list">
                               <span className="left-dt">C.I.</span>
                               <span className="right-dt">
-                                {client.idPersona.ci
-                                  ? client.idPersona.ci
-                                  : "---------"}
+                                {client.ci ? client.ci : "---------"}
                               </span>
-                            </div>
-                            <div className="shopowner-dt-list">
-                              <span className="left-dt">Email</span>
-                              <span className="right-dt">{client.email}</span>
                             </div>
 
-                            <div className="shopowner-dt-list">
-                              <span className="left-dt">Teléfono</span>
-                              <span className="right-dt">
-                                {client.phone ? client.phone : "--------"}
-                              </span>
-                            </div>
-                            <div className="shopowner-dt-list">
-                              <span className="left-dt">Rol</span>
-                              <span className="right-dt">{client.role}</span>
-                            </div>
                             <div className="shopowner-dt-list">
                               <span className="left-dt">Personal</span>
                               <span className="right-dt">

@@ -1,30 +1,30 @@
-import { API_URL } from './Config'
+import { API_URL } from "./Config";
 export default ({ id, token, notify, ofertas = false }) => {
   function handlerDelete() {
-    fetch(`${API_URL}/user/${id}`, {
-      method: 'DELETE',
+    fetch(`${API_URL}/person/${id}`, {
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
         if (res.status === 401) {
-          signOut()
+          signOut();
         }
-        return res.json()
+        return res.json();
       })
       .then((data) => {
         if (data.error) {
-          notify.show('Error el en servidor', 'error')
+          notify.show("Error el en servidor", "error");
         } else {
-          notify.show('El Cliente a sido eliminado', 'success')
+          notify.show("El Cliente a sido eliminado", "success");
         }
       })
-      .catch((error) => notify.show('Error en el servidor', 'error', 2000))
+      .catch((error) => notify.show("Error en el servidor", "error", 2000));
   }
   function handlerDeleteOferta() {
-    console.log('Eliminandon ofertas')
+    console.log("Eliminandon ofertas");
   }
   return (
     <div
@@ -32,8 +32,7 @@ export default ({ id, token, notify, ofertas = false }) => {
       className="header-cate-model main-gambo-model modal fade"
       tabIndex="-1"
       role="dialog"
-      aria-modal="false"
-    >
+      aria-modal="false">
       <div className="modal-dialog category-area" role="document">
         <div className="category-area-inner">
           <div className="modal-header">
@@ -41,8 +40,7 @@ export default ({ id, token, notify, ofertas = false }) => {
               type="button"
               className="btn btn-close close"
               data-dismiss="modal"
-              aria-label="Close"
-            >
+              aria-label="Close">
               <i className="fas fa-times"></i>
             </button>
           </div>
@@ -54,16 +52,14 @@ export default ({ id, token, notify, ofertas = false }) => {
               <a
                 data-dismiss="modal"
                 className="view-btn hover-btn btn-margin"
-                style={{ cursor: 'pointer' }}
-                onClick={ofertas ? handlerDeleteOferta : handlerDelete}
-              >
+                style={{ cursor: "pointer" }}
+                onClick={ofertas ? handlerDeleteOferta : handlerDelete}>
                 SI
               </a>
               <a
                 data-dismiss="modal"
                 className="view-btn hover-btn btn-margin"
-                style={{ cursor: 'pointer' }}
-              >
+                style={{ cursor: "pointer" }}>
                 NO
               </a>
             </div>
@@ -244,7 +240,7 @@ export default ({ id, token, notify, ofertas = false }) => {
         }
 
         .search-by-cat .single-cat {
-          -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=85)';
+          -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
           -webkit-box-align: center;
           -ms-flex-align: center;
           align-items: center;
@@ -286,5 +282,5 @@ export default ({ id, token, notify, ofertas = false }) => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};

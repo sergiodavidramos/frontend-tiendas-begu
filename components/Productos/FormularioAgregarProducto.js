@@ -10,8 +10,7 @@ const FormularioAgregarProducto = ({
   setMostrarFormulario,
 }) => {
   const [butt, setButt] = useState(false);
-  const [images, setImages] = useState([]);
-  const [im, setIm] = useState([]);
+
   var fileObj = [];
   var fileArray = [];
   const [token, setToken] = useState(false);
@@ -46,111 +45,56 @@ const FormularioAgregarProducto = ({
         2000
       );
     } else {
-      if (images.length < 0) {
-        notify.show(
-          "Por favor seleccione al menos una imagen",
-          "warning",
-          2000
-        );
-      } else {
-        setButt(true);
-        fetch(`${API_URL}/productos`, {
-          method: "POST",
-          body: JSON.stringify({
-            code: target[0].value,
-            name: target[1].value,
-            category: target[2].value,
-            tipoVenta: target[3].value,
-            stock: target[4].value,
-            precioCompra: target[5].value,
-            precioVenta: target[6].value,
-            detail: target[7].value,
-          }),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+      setButt(true);
+      fetch(`${API_URL}/productos`, {
+        method: "POST",
+        body: JSON.stringify({
+          code: target[0].value,
+          name: target[1].value,
+          category: target[2].value,
+          tipoVenta: target[3].value,
+          stock: target[4].value,
+          precioCompra: target[5].value,
+          precioVenta: target[6].value,
+          detail: target[7].value,
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.status === 401) signOut();
+          return res.json();
         })
-          .then((res) => {
-            if (res.status === 401) signOut();
-            return res.json();
-          })
-          .then((response) => {
-            if (response.error) {
-              console.log("RRRRR", response);
-              notify.show(response.body, "error", 5000);
-              setButt(false);
-            } else {
-              if (im.length < 4) {
-                for (const file of im) formData.append("imagen", file);
-              } else
-                for (let i = 0; i < 4; i++) {
-                  formData.append("imagen", im[i]);
-                }
-              fetch(`${API_URL}/upload/producto/${response.body._id}`, {
-                method: "PUT",
-                body: formData,
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              })
-                .then((response) => response.json())
-                .then((response) => {
-                  if (response.error) {
-                    console.log("El Error", response);
-                    notify.show(response.body, "error", 2000);
-                    setButt(false);
-                  } else {
-                    textCode.current.focus();
-                    target[0].value = "";
-                    target[1].value = "";
-                    target[2].value = "0";
-                    target[3].value = "0";
-                    target[4].value = "";
-                    target[5].value = "";
-                    target[6].value = "";
-                    target[7].value = "";
-
-                    setImages([]);
-                    notify.show(
-                      "Producto agregado con Exito! ",
-                      "success",
-                      2000
-                    );
-                    setButt(false);
-                    if (desabilitarStock) setMostrarFormulario(false);
-                  }
-                })
-                .catch((error) => {
-                  console.log("erorrrr", error);
-                  notify.show("No se pudo subir las imagenes", "error");
-                  setButt(false);
-                });
-            }
-          })
-          .catch((error) => {
-            notify.show("Error en el Servidor", "error");
+        .then((response) => {
+          if (response.error) {
+            console.log("RRRRR", response);
+            notify.show(response.body, "error", 5000);
             setButt(false);
-          });
-      }
+          } else {
+            textCode.current.focus();
+            target[0].value = "";
+            target[1].value = "";
+            target[2].value = "0";
+            target[3].value = "0";
+            target[4].value = "";
+            target[5].value = "";
+            target[6].value = "";
+            target[7].value = "";
+
+            notify.show("Producto agregado con Exito! ", "success", 2000);
+            setButt(false);
+            if (desabilitarStock) setMostrarFormulario(false);
+          }
+        })
+        .catch((error) => {
+          notify.show("Error en el Servidor", "error");
+          setButt(false);
+        });
     }
   };
-  const uploadMultipleFile = (e) => {
-    fileObj.push(e.target.files);
-    setIm(e.target.files);
-    if (fileObj[0].length <= 4) {
-      for (let i = 0; i < fileObj[0].length; i++) {
-        fileArray.push(URL.createObjectURL(fileObj[0][i]));
-      }
-      setImages(fileArray);
-    } else {
-      notify.show("Solo puede seleccionar 4 imagenes", "warning", 2000);
-      for (let i = 0; i < 4; i++) {
-        fileArray.push(URL.createObjectURL(fileObj[0][i]));
-      }
-      setImages(fileArray);
-    }
-  };
+
   return (
     <div className="row">
       <div className="col-lg-12">
@@ -257,45 +201,6 @@ const FormularioAgregarProducto = ({
                         <div id="edit"></div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">
-                      Puede seleccionar hasta 2 Images*
-                    </label>
-                    <div className="input-group">
-                      <div className="custom-file">
-                        <input
-                          type="file"
-                          className="custom-file-input"
-                          id="inputGroupFile05"
-                          aria-describedby="inputGroupFileAddon05"
-                          required
-                          multiple
-                          onChange={uploadMultipleFile}
-                          accept="image/x-png,image/gif,image/jpeg"
-                        />
-                        <label
-                          className="custom-file-label"
-                          htmlFor="inputGroupFile05">
-                          Seleccione Images
-                        </label>
-                      </div>
-                    </div>
-                    <ul className="add-produc-imgs">
-                      {images.map((url) => (
-                        <li key={url}>
-                          <div
-                            className="add-cate-img-1"
-                            htmlFor="inputGroupFile05">
-                            <img
-                              src={url}
-                              alt="Seleecione una imagen de producto frifolly"
-                            />
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
 
                   <button

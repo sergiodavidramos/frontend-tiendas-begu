@@ -15,14 +15,7 @@ const filaProductos = ({
   return (
     <tr>
       <td>{pro.producto.code}</td>
-      <td>
-        <div className="cate-img-5">
-          <img
-            src={`${API_URL}/upload/producto/${pro.producto.img[0]}`}
-            alt={pro.producto.name}
-          />
-        </div>
-      </td>
+
       <td>{pro.producto.name}</td>
       {pro.stockLotes.length > 0 ? (
         <td>

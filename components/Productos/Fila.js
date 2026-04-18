@@ -10,14 +10,7 @@ export default ({ pro }) => {
   return (
     <tr>
       <td>{pro.code}</td>
-      <td>
-        <div className="cate-img-5">
-          <img
-            src={`${API_URL}/upload/producto/${pro.img[0]}`}
-            alt={pro.name}
-          />
-        </div>
-      </td>
+
       <td>{pro.name}</td>
       <td>{pro.category.name}</td>
       <td>{moment(pro.fechaCaducidad).format("LL") || ""}</td>
@@ -28,7 +21,7 @@ export default ({ pro }) => {
           <span className="badge-item badge-status-false">Inactivo</span>
         )}
       </td>
-      <td>{pro.stock}</td>
+
       <td className="action-btns">
         <Link
           legacyBehavior
