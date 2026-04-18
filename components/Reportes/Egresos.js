@@ -30,7 +30,7 @@ const EgresosSucursal = ({ egresos }) => {
                                         totalEgresos += datoEgreso.total
                                         return (
                                             <tr key={index}>
-                                                <td>{moment(datoEgreso.fecha).subtract(4, 'hours').format("LLLL")}</td>
+                                                <td>{moment.utc(datoEgreso.fecha).format("LLLL")}</td>
                                                 <td>
                                                     {datoEgreso.user.length > 0
                                                         ? datoEgreso.user[0].email

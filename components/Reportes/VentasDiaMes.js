@@ -25,7 +25,9 @@ const VentasDiaMes = ({ adminSucursal, token }) => {
     async function getVentasDia(idSucursal, token) {
         try {
             const datos = await fetch(
-                `${API_URL}/detalle/reporte/ventas-dia/${idSucursal}`,
+                `${API_URL}/venta?fechaInicio=${moment().format(
+                    "YYYY/MM/DD"
+                )}&fechaFin=${moment().add(1, "days").format("YYYY/MM/DD")}&idSucursal=${idSucursal}`,
                 {
                     method: "GET",
                     headers: {
@@ -37,9 +39,19 @@ const VentasDiaMes = ({ adminSucursal, token }) => {
             const ventasDia = await datos.json();
             if (ventasDia.error) notify.show("Error en la peticion dia", "error");
             else {
-                setVentasDia(ventasDia.body);
-                let horaRestar = moment().tz("America/La_Paz").format("z");
-                setZonaHoraria(parseInt(horaRestar));
+                for (let i = 0; i < ventasDia.body.length; i++) {
+                    const horaRestar = moment().tz("America/La_Paz").format("z");
+                    ventasDia.body[i].fecha = moment
+                        .utc(ventasDia.body[i].fecha)
+                        .subtract({ hours: -parseInt(horaRestar) })
+                        .toDate();
+
+                }
+                console.log
+                // setVentasDia(ventasDia.body);
+                // let horaRestar = moment().tz("America/La_Paz").format("z");
+                // setZonaHoraria(parseInt(horaRestar));
+
 
             }
         } catch (error) {
@@ -166,7 +178,7 @@ const VentasDiaMes = ({ adminSucursal, token }) => {
                             <thead>
                                 <tr>
                                     <th>Horas</th>
-                                    <th>Ventas totales</th>
+
                                     <th>Total Bs.</th>
                                 </tr>
                             </thead>
@@ -177,11 +189,11 @@ const VentasDiaMes = ({ adminSucursal, token }) => {
                                         return (
                                             <tr key={index}>
                                                 <td>
-                                                    {moment(hora._id)
+                                                    {moment.utc(hora.fecha)
                                                         .subtract({ hours: -zonaHoraria })
                                                         .hour()}
                                                 </td>
-                                                <td>{hora.count}</td>
+                                                {/* <td>{hora.count}</td> */}
                                                 <td>{hora.total.toFixed(2)}</td>
                                             </tr>
                                         );
@@ -189,7 +201,7 @@ const VentasDiaMes = ({ adminSucursal, token }) => {
 
                                 {
                                     <tr>
-                                        <td></td>
+
                                         <td>Total:</td>
                                         <td>{TotalVentasDelDia.toFixed(2)}</td>
                                     </tr>

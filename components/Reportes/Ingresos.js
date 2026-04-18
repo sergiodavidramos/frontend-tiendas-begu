@@ -33,7 +33,7 @@ const IngresosSucursal = ({ ingresos }) => {
                                         totalIngresos += datoIngreso.detalle.subTotal;
                                         return (
                                             <tr key={index}>
-                                                <td>{moment.utc(datoIngreso.fecha).subtract(4, 'hours').format("LLLL")}</td>
+                                                <td>{moment.utc(datoIngreso.fecha).format("LL")}</td>
                                                 {/* <td>{new d(datoIngreso.fecha)}</td> */}
                                                 <td>{datoIngreso.detalle.producto.name}</td>
                                                 <td>{datoIngreso.detalle.tipoVenta}</td>
