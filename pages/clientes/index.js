@@ -20,8 +20,8 @@ const Clientes = () => {
     async function paginationHandler(page) {
         setPageState(page.selected);
     }
-    function getUserAPi(tokenLocal) {
-        fetch(`${API_URL}/person`, {
+    function getUserAPi(pageState, tokenLocal) {
+        fetch(`${API_URL}/person?desde=${pageState * 10}&limite=${10}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${tokenLocal}`,
@@ -38,6 +38,7 @@ const Clientes = () => {
                 if (data.error) {
                     notify.show("Error el en servidor", "error");
                 } else {
+
                     setClientes(data.body.persons);
                     setCount(data.body.count);
                 }
@@ -57,7 +58,7 @@ const Clientes = () => {
         } else signOut();
         setToken(tokenLocal);
         if (!clientFilter) {
-            getUserAPi(tokenLocal);
+            getUserAPi(pageState, tokenLocal);
         } else {
             setClientes(clientFilter);
             setCount(0);
@@ -66,43 +67,11 @@ const Clientes = () => {
     function handlerDelete(id) {
         setidEliminarCliente(id);
     }
-    function handleChangeClientes() {
-        if (event.target.value !== "0") {
-            fetch(
-                `${API_URL}/user?desde=${pageState * 10}&limite=${10}&state=${event.target.value
-                }`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                },
-            )
-                .then((res) => {
-                    if (res.status === 401) {
-                        signOut();
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    if (data.error) {
-                        notify.show("Error el en servidor", "error");
-                    } else {
-                        setClientes(data.body[0]);
-                        setCount(data.body[1]);
-                    }
-                })
-                .catch((error) => notify.show("Error en el servidor", "error", 2000));
-        } else {
-            getUserAPi(token);
-            setClientFilter(null);
-        }
-    }
+
     function handlerSubmit() {
         event.preventDefault();
         if (event.target[0].value !== "") {
-            fetch(`${API_URL}/user/buscar/${event.target[0].value}`, {
+            fetch(`${API_URL}/person/buscar/${event.target[0].value}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -125,7 +94,7 @@ const Clientes = () => {
                 })
                 .catch((error) => notify.show("Error en el servidor", "error", 2000));
         } else {
-            getUserAPi(token);
+            getUserAPi(pageState, token);
         }
     }
     return (
@@ -148,22 +117,7 @@ const Clientes = () => {
                                 <li className="breadcrumb-item active">Clientes</li>
                             </ol>
                             <div className="row justify-content-between">
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="bulk-section mt-30">
-                                        <div className="input-group">
-                                            <select
-                                                id="action"
-                                                name="action"
-                                                className="form-control"
-                                                defaultValue="0"
-                                                onChange={handleChangeClientes}>
-                                                <option value="0">Todos los Clientes</option>
-                                                <option value={true}>Activos</option>
-                                                <option value={false}>Inactivos</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div className="col-lg-5 col-md-6">
                                     <form onSubmit={handlerSubmit}>
                                         <div className="bulk-section mt-30">
