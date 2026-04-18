@@ -10,164 +10,164 @@ import Notifications, { notify } from "react-notify-toast";
 import { API_URL } from "../../../components/Config";
 
 const viewClient = () => {
-  const { signOut } = useContext(UserContext);
-  const [client, setCliente] = useState(null);
-  const router = useRouter();
+    const { signOut } = useContext(UserContext);
+    const [client, setCliente] = useState(null);
+    const router = useRouter();
 
-  const mapContainer = useRef(null);
+    const mapContainer = useRef(null);
 
-  useEffect(() => {
-    const tokenLocal = localStorage.getItem("fribar-token");
-    const user = localStorage.getItem("fribar-user");
-    if (!tokenLocal && !user) {
-      signOut();
-    }
-    if (
-      JSON.parse(user).role === "GERENTE-ROLE" ||
-      JSON.parse(user).role === "ADMIN-ROLE"
-    ) {
-    } else signOut();
-    if (!client && router && router.query && router.query.id) {
-      const { id } = router.query;
-      fetch(`${API_URL}/person?id=${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${tokenLocal}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => {
-          if (res.status === 401) {
+    useEffect(() => {
+        const tokenLocal = localStorage.getItem("fribar-token");
+        const user = localStorage.getItem("fribar-user");
+        if (!tokenLocal && !user) {
             signOut();
-          }
-          return res.json();
-        })
-        .then((data) => {
-          if (data.error) {
-            notify.show("Error en el servidor cliente", "error", 2000);
-          } else {
-            console.log(data);
-            setCliente(data.body.persons[0]);
-          }
-        })
-        .catch((error) => {
-          console.log("SSSSS", error);
-          notify.show("Error en el servidor Cli", "error", 2000);
-        });
-    }
-  }, [router]);
+        }
+        if (
+            JSON.parse(user).role === "GERENTE-ROLE" ||
+            JSON.parse(user).role === "ADMIN-ROLE"
+        ) {
+        } else signOut();
+        if (!client && router && router.query && router.query.id) {
+            const { id } = router.query;
+            fetch(`${API_URL}/person?id=${id}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${tokenLocal}`,
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((res) => {
+                    if (res.status === 401) {
+                        signOut();
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    if (data.error) {
+                        notify.show("Error en el servidor cliente", "error", 2000);
+                    } else {
+                        setCliente(data.body.persons[0]);
 
-  return (
-    <>
-      <TopNavbar />
-      <div id="layoutSidenav">
-        <SideNav />
-        <div id="layoutSidenav_content">
-          <main>
-            <Notifications options={{ zIndex: 9999, top: "56px" }} />
-            <div className="container-fluid">
-              <h2 className="mt-30 page-title">Informacion del cliente</h2>
-              <ol className="breadcrumb mb-30">
-                <li className="breadcrumb-item">
-                  <Link legacyBehavior href="/">
-                    <a>Tablero</a>
-                  </Link>
-                </li>
-                <li className="breadcrumb-item active">
-                  <Link legacyBehavior href="/clientes">
-                    <a>clientes</a>
-                  </Link>
-                </li>
-                <li className="breadcrumb-item active">Ver cliente</li>
-              </ol>
+                    }
+                })
+                .catch((error) => {
+                    console.log("SSSSS", error);
+                    notify.show("Error en el servidor Cli", "error", 2000);
+                });
+        }
+    }, [router]);
 
-              {client ? (
-                <div className="row">
-                  <div className="col-lg-5 col-md-6">
-                    <div className="card card-static-2 mb-30">
-                      <div className="card-body-table">
-                        <div className="shopowner-content-left text-center pd-20">
-                          <div className="shopowner-dt-left mt-4">
-                            <h4>{client.nombre_comp}</h4>
-                            <span>{client.role}</span>
-                          </div>
-                          <ul className="product-dt-purchases">
-                            <li>
-                              <div className="product-status">
-                                Compras
-                                <span className="badge-item-2 badge-status">
-                                  {client.compras}
-                                </span>
-                              </div>
-                            </li>
-                            <li>
-                              <div className="product-status">
-                                Puntos
-                                <span className="badge-item-2 badge-status">
-                                  {client.puntos}
-                                </span>
-                              </div>
-                            </li>
-                          </ul>
-                          <div className="shopowner-dts">
-                            <div className="shopowner-dt-list">
-                              <span className="left-dt">Nombre</span>
-                              <span className="right-dt">
-                                {client.nombre_comp}
-                              </span>
-                            </div>
-                            <div className="shopowner-dt-list">
-                              <span className="left-dt">C.I.</span>
-                              <span className="right-dt">
-                                {client.ci ? client.ci : "---------"}
-                              </span>
-                            </div>
+    return (
+        <>
+            <TopNavbar />
+            <div id="layoutSidenav">
+                <SideNav />
+                <div id="layoutSidenav_content">
+                    <main>
+                        <Notifications options={{ zIndex: 9999, top: "56px" }} />
+                        <div className="container-fluid">
+                            <h2 className="mt-30 page-title">Informacion del cliente</h2>
+                            <ol className="breadcrumb mb-30">
+                                <li className="breadcrumb-item">
+                                    <Link legacyBehavior href="/">
+                                        <a>Tablero</a>
+                                    </Link>
+                                </li>
+                                <li className="breadcrumb-item active">
+                                    <Link legacyBehavior href="/clientes">
+                                        <a>clientes</a>
+                                    </Link>
+                                </li>
+                                <li className="breadcrumb-item active">Ver cliente</li>
+                            </ol>
 
-                            <div className="shopowner-dt-list">
-                              <span className="left-dt">Personal</span>
-                              <span className="right-dt">
-                                {client.personal ? "Si" : "No"}
-                              </span>
-                            </div>
-                          </div>
+                            {client ? (
+                                <div className="row">
+                                    <div className="col-lg-5 col-md-6">
+                                        <div className="card card-static-2 mb-30">
+                                            <div className="card-body-table">
+                                                <div className="shopowner-content-left text-center pd-20">
+                                                    <div className="shopowner-dt-left mt-4">
+                                                        <h4>{client.nombre_comp}</h4>
+                                                        <span>{client.role}</span>
+                                                    </div>
+                                                    <ul className="product-dt-purchases">
+                                                        <li>
+                                                            <div className="product-status">
+                                                                Compras
+                                                                <span className="badge-item-2 badge-status">
+                                                                    {client.compras}
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div className="product-status">
+                                                                Puntos
+                                                                <span className="badge-item-2 badge-status">
+                                                                    {client.puntos}
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <div className="shopowner-dts">
+                                                        <div className="shopowner-dt-list">
+                                                            <span className="left-dt">Nombre</span>
+                                                            <span className="right-dt">
+                                                                {client.nombre_comp}
+                                                            </span>
+                                                        </div>
+                                                        <div className="shopowner-dt-list">
+                                                            <span className="left-dt">C.I.</span>
+                                                            <span className="right-dt">
+                                                                {client.ci ? client.ci : "---------"}
+                                                            </span>
+                                                        </div>
+
+                                                        <div className="shopowner-dt-list">
+                                                            <span className="left-dt">Personal</span>
+                                                            <span className="right-dt">
+                                                                {client.personal ? "Si" : "No"}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                ""
+                            )}
                         </div>
-                      </div>
-                    </div>
-                  </div>
+                    </main>
+                    <Footer />
                 </div>
-              ) : (
-                ""
-              )}
-            </div>
-          </main>
-          <Footer />
-        </div>
-      </div>
-      <div
-        id="mapa_model"
-        className="header-cate-model main-gambo-model modal fade"
-        tabIndex="-1"
-        role="dialog"
-        aria-modal="false">
-        <div className="modal-dialog category-area" role="document">
-          <div className="category-area-inner">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="btn btn-close close"
-                data-dismiss="modal"
-                aria-label="Close">
-                <i className="fas fa-times"></i>
-              </button>
             </div>
             <div
-              className="category-model-content modal-content"
-              style={{ width: "auto" }}>
-              <div ref={mapContainer} className="map-container"></div>
-            </div>
-          </div>
-        </div>
-        <style jsx>{`
+                id="mapa_model"
+                className="header-cate-model main-gambo-model modal fade"
+                tabIndex="-1"
+                role="dialog"
+                aria-modal="false">
+                <div className="modal-dialog category-area" role="document">
+                    <div className="category-area-inner">
+                        <div className="modal-header">
+                            <button
+                                type="button"
+                                className="btn btn-close close"
+                                data-dismiss="modal"
+                                aria-label="Close">
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div
+                            className="category-model-content modal-content"
+                            style={{ width: "auto" }}>
+                            <div ref={mapContainer} className="map-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <style jsx>{`
           .btn-confirmation {
             text-align: center;
             padding: 10px;
@@ -385,9 +385,9 @@ const viewClient = () => {
             height: 700px;
           }
         `}</style>
-      </div>
-    </>
-  );
+            </div>
+        </>
+    );
 };
 
 export default viewClient;
